@@ -25,8 +25,12 @@ const {pageTitle} = Astro.props
 		<p>Este es nuestro Home</p>
 		<Footer/>
 		<script>
-		     import "../scripts/menu.js";
-			 </script>
+		     
+    document.querySelector('.hamburger')?.addEventListener('click', () => {
+      document.querySelector('.nav-links')?.classList.toggle('expanded');
+    });
+
+	</script>
 
 	</body>
 </html>
