@@ -1,0 +1,759 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+/* ── Cargar todos los posts dinámicamente ─────────────────────────── */
+const postFiles = import.meta.glob('/src/pages/posts/*.md', { eager: true });
+
+function getCategoria(tags: string[]): string {
+  if (tags.some(t => ['Pauta Digital', 'Meta Ads', 'Facebook Ads', 'Google Ads'].includes(t)))
+    return 'Facebook Ads';
+  if (tags.some(t => ['Automatización', 'Inteligencia Artificial', 'Productividad'].includes(t)))
+    return 'Automatización';
+  return 'Marketing Digital';
+}
+
+function formatDate(d: string) {
+  return new Date(d).toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
+const posts = Object.entries(postFiles)
+  .map(([path, mod]: [string, any]) => {
+    const fm = mod.frontmatter;
+    return {
+      href: `/blog/${path.split('/').pop()!.replace('.md', '')}`,
+      titulo: fm.title as string,
+      extracto: fm.description as string,
+      fechaISO: String(fm.pubDate),
+      fecha: formatDate(String(fm.pubDate)),
+      categoria: getCategoria(fm.tags || []),
+      imagen: (fm.image?.url as string) || '',
+      alt: (fm.image?.alt as string) || (fm.title as string),
+    };
+  })
+  .sort((a, b) => new Date(b.fechaISO).getTime() - new Date(a.fechaISO).getTime());
+
+const featuredPost = posts[0];
+const gridPosts   = posts.slice(1);
+
+const categorias = ['Todos', ...Array.from(new Set(posts.map(p => p.categoria)))];
+
+/* ── Schemas ──────────────────────────────────────────────────────── */
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://uconex.co' },
+    { '@type': 'ListItem', position: 2, name: 'Blog',   item: 'https://uconex.co/blog' },
+  ],
+};
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Blog Uconex — Marketing Digital y Automatización',
+  itemListElement: posts.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://uconex.co${p.href}`,
+    name: p.titulo,
+  })),
+};
+---
+
+<BaseLayout
+  title="Blog"
+  description="Guías, estrategias y herramientas de marketing digital y automatización para emprendedores colombianos."
+>
+  <script type="application/ld+json" is:inline slot="head" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" is:inline slot="head" set:html={JSON.stringify(itemListSchema)} />
+
+  <!-- ── HERO ────────────────────────────────────────────────────── -->
+  <section class="blog-hero">
+    <div class="blog-hero-inner">
+      <nav class="breadcrumb" aria-label="Migas de pan">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Blog</span>
+      </nav>
+      <h1>Recursos para hacer crecer<br />tu negocio</h1>
+      <p>Guías, estrategias y herramientas de marketing digital y automatización explicadas de forma simple para emprendedores colombianos.</p>
+    </div>
+  </section>
+
+  <!-- ── FILTROS ──────────────────────────────────────────────────── -->
+  <div class="blog-filters" id="blog-filters">
+    <div class="filters-inner">
+      <div class="filter-tabs" role="group" aria-label="Filtrar por categoría">
+        {categorias.map((cat, i) => (
+          <button
+            class={`filter-tab${i === 0 ? ' is-active' : ''}`}
+            data-filter={cat}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input
+          type="search"
+          id="blog-search"
+          placeholder="Buscar artículos..."
+          aria-label="Buscar artículos"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LISTING ──────────────────────────────────────────────────── -->
+  <div class="blog-listing">
+    <div class="blog-grid" id="blog-grid">
+
+      <!-- Artículo destacado -->
+      {featuredPost && (
+        <article
+          class="blog-card featured"
+          data-categoria={featuredPost.categoria}
+          data-titulo={featuredPost.titulo}
+          data-extracto={featuredPost.extracto}
+        >
+          <a href={featuredPost.href} class="blog-img-wrap" tabindex="-1" aria-hidden="true">
+            <div class="blog-img">
+              {featuredPost.imagen
+                ? <img src={featuredPost.imagen} alt={featuredPost.alt} loading="eager" />
+                : <span class="blog-img-placeholder">Imagen artículo</span>
+              }
+            </div>
+          </a>
+          <div class="blog-body featured-body">
+            <div class="blog-meta">
+              <span class="blog-cat">{featuredPost.categoria}</span>
+              <time class="blog-date" datetime={featuredPost.fechaISO}>{featuredPost.fecha}</time>
+            </div>
+            <h2>
+              <a href={featuredPost.href} class="card-title-link">{featuredPost.titulo}</a>
+            </h2>
+            <p>{featuredPost.extracto}</p>
+            <a href={featuredPost.href} class="blog-link">
+              Leer guía completa
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </article>
+      )}
+
+      <!-- Cards regulares -->
+      {gridPosts.map((post) => (
+        <article
+          class="blog-card"
+          data-categoria={post.categoria}
+          data-titulo={post.titulo}
+          data-extracto={post.extracto}
+        >
+          <a href={post.href} class="blog-img-wrap" tabindex="-1" aria-hidden="true">
+            <div class="blog-img">
+              {post.imagen
+                ? <img src={post.imagen} alt={post.alt} loading="lazy" />
+                : <span class="blog-img-placeholder">Imagen artículo</span>
+              }
+            </div>
+          </a>
+          <div class="blog-body">
+            <div class="blog-meta">
+              <span class="blog-cat">{post.categoria}</span>
+              <time class="blog-date" datetime={post.fechaISO}>{post.fecha}</time>
+            </div>
+            <h3>
+              <a href={post.href} class="card-title-link">{post.titulo}</a>
+            </h3>
+            <p>{post.extracto}</p>
+            <a href={post.href} class="blog-link">
+              Leer artículo
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </article>
+      ))}
+
+      <!-- Estado vacío -->
+      <div class="no-results" id="no-results" hidden aria-live="polite">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <p>No se encontraron artículos que coincidan con tu búsqueda.</p>
+        <button class="reset-btn" id="reset-filters">Ver todos</button>
+      </div>
+
+    </div>
+
+    <!-- ── PAGINACIÓN ────────────────────────────────────────────── -->
+    <nav class="blog-pagination" aria-label="Paginación del blog">
+      <button class="page-btn is-active" aria-current="page" aria-label="Página 1">1</button>
+      <button class="page-btn" aria-label="Página 2" disabled>2</button>
+      <button class="page-btn" aria-label="Página 3" disabled>3</button>
+      <button class="page-btn page-next" aria-label="Siguiente página" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </nav>
+
+  </div>
+
+</BaseLayout>
+
+<!-- ── ESTILOS ──────────────────────────────────────────────────────── -->
+<style>
+  /* ── HERO ─────────────────────────────────────────────────────────── */
+  .blog-hero {
+    background: #0a0a0f;
+    color: #fff;
+    padding: calc(68px + 3.5rem) 1.5rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-top: -68px;
+  }
+
+  /* Grid pattern */
+  .blog-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.045) 25%, rgba(255,255,255,0.045) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.045) 75%, rgba(255,255,255,0.045) 76%, transparent 77%),
+      linear-gradient(90deg, transparent 24%, rgba(255,255,255,0.045) 25%, rgba(255,255,255,0.045) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.045) 75%, rgba(255,255,255,0.045) 76%, transparent 77%);
+    background-size: 60px 60px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  /* Glow */
+  .blog-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 260px;
+    background: radial-gradient(ellipse, rgba(113,72,252,0.28) 0%, transparent 70%);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+
+  .blog-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 1.25rem;
+  }
+
+  .breadcrumb a {
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: rgba(255,255,255,0.75);
+  }
+
+  .blog-hero h1 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .blog-hero p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.45);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── FILTROS ─────────────────────────────────────────────────────── */
+  .blog-filters {
+    background: #fafafa;
+    border-bottom: 1px solid #ececec;
+    padding: 0.9rem 1.5rem;
+    position: sticky;
+    top: 68px;
+    z-index: 40;
+  }
+
+  .filters-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-tab {
+    padding: 0.35rem 0.95rem;
+    border-radius: 999px;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1.5px solid #d1d1d6;
+    background: #fff;
+    color: #6b6b76;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  }
+
+  .filter-tab:hover {
+    border-color: #7148FC;
+    color: #7148FC;
+  }
+
+  .filter-tab.is-active {
+    background: #161616;
+    color: #fff;
+    border-color: #161616;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1.5px solid #d1d1d6;
+    border-radius: 8px;
+    padding: 0.4rem 0.85rem;
+    background: #fff;
+    transition: border-color 0.2s ease;
+  }
+
+  .search-box:focus-within {
+    border-color: #7148FC;
+  }
+
+  .search-box svg {
+    color: #aaa;
+    flex-shrink: 0;
+  }
+
+  .search-box input {
+    border: none;
+    outline: none;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.82rem;
+    color: #333;
+    width: 170px;
+    background: transparent;
+  }
+
+  .search-box input::placeholder {
+    color: #bbb;
+  }
+
+  /* ── LISTING ─────────────────────────────────────────────────────── */
+  .blog-listing {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* ── Grid ────────────────────────────────────────────────────────── */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  /* ── Card base ───────────────────────────────────────────────────── */
+  .blog-card {
+    background: #fff;
+    border: 1px solid #e5e5ea;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .blog-card:hover {
+    box-shadow: 0 6px 28px rgba(113,72,252,0.09);
+    border-color: rgba(113,72,252,0.22);
+    transform: translateY(-3px);
+  }
+
+  .blog-card.is-hidden {
+    display: none;
+  }
+
+  /* ── Artículo destacado ──────────────────────────────────────────── */
+  .blog-card.featured {
+    grid-column: 1 / -1;
+    flex-direction: row;
+  }
+
+  .blog-card.featured .blog-img-wrap {
+    flex: 0 0 48%;
+  }
+
+  .blog-card.featured .blog-img {
+    height: 100%;
+    min-height: 260px;
+  }
+
+  .blog-card.featured .blog-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2.25rem 2rem;
+  }
+
+  .blog-card.featured h2 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    color: #161616;
+    margin-bottom: 0.75rem;
+  }
+
+  .featured-body p {
+    font-size: 0.9rem;
+    max-width: 520px;
+  }
+
+  /* ── Imagen ──────────────────────────────────────────────────────── */
+  .blog-img-wrap {
+    display: block;
+  }
+
+  .blog-img {
+    width: 100%;
+    height: 190px;
+    background: #e8e8ec;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .blog-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .blog-card:hover .blog-img img {
+    transform: scale(1.04);
+  }
+
+  .blog-img-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.75rem;
+    color: #aaa;
+  }
+
+  /* ── Body ────────────────────────────────────────────────────────── */
+  .blog-body {
+    padding: 1.35rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .blog-cat {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #161616;
+    background: #f3f3f8;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+  }
+
+  .blog-date {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.75rem;
+    color: #aaa;
+  }
+
+  .blog-card h3 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #161616;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.6rem;
+  }
+
+  .card-title-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  .blog-card:hover .card-title-link {
+    color: #4924BC;
+  }
+
+  .blog-body p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.845rem;
+    line-height: 1.7;
+    color: #6b6b76;
+    flex-grow: 1;
+    margin-bottom: 1.1rem;
+  }
+
+  .blog-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #4924BC;
+    text-decoration: none;
+    transition: gap 0.2s ease, color 0.2s ease;
+    margin-top: auto;
+  }
+
+  .blog-link:hover {
+    gap: 0.55rem;
+    color: #7148FC;
+  }
+
+  /* ── Sin resultados ──────────────────────────────────────────────── */
+  .no-results {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 4rem 1rem;
+    color: #aaa;
+    text-align: center;
+  }
+
+  .no-results p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.9rem;
+    color: #6b6b76;
+    flex-grow: 0;
+    margin-bottom: 0;
+  }
+
+  .reset-btn {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #4924BC;
+    background: none;
+    border: 1.5px solid rgba(73,36,188,0.3);
+    border-radius: 8px;
+    padding: 0.5rem 1.1rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .reset-btn:hover {
+    border-color: #7148FC;
+    background: rgba(113,72,252,0.05);
+  }
+
+  /* ── Paginación ──────────────────────────────────────────────────── */
+  .blog-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-top: 3rem;
+  }
+
+  .page-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1.5px solid #d1d1d6;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #6b6b76;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s, color 0.18s;
+  }
+
+  .page-btn:not(:disabled):hover {
+    border-color: #7148FC;
+    color: #7148FC;
+  }
+
+  .page-btn.is-active {
+    background: #161616;
+    color: #fff;
+    border-color: #161616;
+  }
+
+  .page-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .blog-card.featured {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .blog-card.featured {
+      flex-direction: column;
+    }
+
+    .blog-card.featured .blog-img-wrap {
+      flex: unset;
+    }
+
+    .blog-card.featured .blog-img {
+      height: 220px;
+      min-height: unset;
+    }
+
+    .blog-card.featured .blog-body {
+      padding: 1.35rem 1.5rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blog-hero {
+      padding: calc(68px + 2.5rem) 1.25rem 2.5rem;
+    }
+
+    .blog-filters {
+      padding: 0.75rem 1.25rem;
+    }
+
+    .blog-listing {
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .search-box input {
+      width: 120px;
+    }
+  }
+</style>
+
+<!-- ── FILTROS JS ──────────────────────────────────────────────────── -->
+<script>
+  const tabs       = document.querySelectorAll<HTMLButtonElement>('.filter-tab');
+  const searchInput = document.getElementById('blog-search') as HTMLInputElement;
+  const cards      = document.querySelectorAll<HTMLElement>('.blog-card');
+  const noResults  = document.getElementById('no-results') as HTMLElement;
+  const resetBtn   = document.getElementById('reset-filters') as HTMLButtonElement;
+
+  let activeFilter = 'Todos';
+  let searchQuery  = '';
+
+  function applyFilters() {
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const cat   = card.dataset.categoria ?? '';
+      const text  = `${card.dataset.titulo ?? ''} ${card.dataset.extracto ?? ''}`.toLowerCase();
+
+      const matchesCat    = activeFilter === 'Todos' || cat === activeFilter;
+      const matchesSearch = searchQuery === '' || text.includes(searchQuery);
+      const visible       = matchesCat && matchesSearch;
+
+      card.classList.toggle('is-hidden', !visible);
+      if (visible) visibleCount++;
+    });
+
+    noResults.hidden = visibleCount > 0;
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      activeFilter = tab.dataset.filter ?? 'Todos';
+
+      tabs.forEach((t) => {
+        t.classList.toggle('is-active', t === tab);
+        t.setAttribute('aria-pressed', t === tab ? 'true' : 'false');
+      });
+
+      applyFilters();
+    });
+  });
+
+  searchInput.addEventListener('input', () => {
+    searchQuery = searchInput.value.trim().toLowerCase();
+    applyFilters();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    activeFilter  = 'Todos';
+    searchQuery   = '';
+    searchInput.value = '';
+
+    tabs.forEach((t) => {
+      const isTodos = t.dataset.filter === 'Todos';
+      t.classList.toggle('is-active', isTodos);
+      t.setAttribute('aria-pressed', isTodos ? 'true' : 'false');
+    });
+
+    applyFilters();
+  });
+</script>

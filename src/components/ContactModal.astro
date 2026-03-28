@@ -1,0 +1,495 @@
+---
+// No props needed — modal is global, triggered by any [href="#contacto"] or [data-contact-modal]
+---
+
+<dialog id="contact-modal" class="modal" aria-labelledby="modal-title" aria-modal="true">
+  <div class="modal-card">
+
+    <!-- Cierre -->
+    <button class="modal-close" aria-label="Cerrar formulario" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <!-- Encabezado -->
+    <div class="modal-header">
+      <div class="modal-badge">Diagnóstico gratuito</div>
+      <h2 id="modal-title">Agenda tu sesión<br />estratégica gratis</h2>
+      <p>Te contactamos en menos de 24 horas para analizar tu negocio sin costo.</p>
+    </div>
+
+    <!-- Formulario -->
+    <form id="contact-form" class="modal-form" novalidate>
+
+      <div class="form-field">
+        <label for="modal-nombre">Nombre completo</label>
+        <input
+          type="text"
+          id="modal-nombre"
+          name="nombre"
+          placeholder="¿Cómo te llamas?"
+          required
+          autocomplete="name"
+          minlength="2"
+        />
+        <span class="field-error" data-for="nombre" hidden>Ingresa tu nombre.</span>
+      </div>
+
+      <div class="form-field">
+        <label for="modal-correo">Correo electrónico</label>
+        <input
+          type="email"
+          id="modal-correo"
+          name="correo"
+          placeholder="tu@correo.com"
+          required
+          autocomplete="email"
+        />
+        <span class="field-error" data-for="correo" hidden>Ingresa un correo válido.</span>
+      </div>
+
+      <div class="form-field">
+        <label for="modal-whatsapp">WhatsApp</label>
+        <div class="phone-wrap">
+          <span class="phone-prefix">+57</span>
+          <input
+            type="tel"
+            id="modal-whatsapp"
+            name="whatsapp"
+            placeholder="300 000 0000"
+            required
+            autocomplete="tel"
+            pattern="[0-9\s\-\+\(\)]{7,15}"
+          />
+        </div>
+        <span class="field-error" data-for="whatsapp" hidden>Ingresa tu número de WhatsApp.</span>
+      </div>
+
+      <button type="submit" class="submit-btn" id="modal-submit">
+        <span class="submit-text">Ir a WhatsApp ahora</span>
+        <span class="submit-loading" hidden>Guardando...</span>
+        <svg class="submit-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <p class="modal-legal">
+        Al enviar aceptas que te contactemos por WhatsApp para agendar tu diagnóstico.
+      </p>
+
+    </form>
+
+  </div>
+</dialog>
+
+<!-- ── Estilos ──────────────────────────────────────────────────── -->
+<style>
+  /* Backdrop */
+  .modal::backdrop {
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* ── Dialog: centrado fijo, compatible con todos los navegadores ── */
+  .modal {
+    /* Reset completo de defaults del UA */
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+
+    /* Centrado garantizado */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Tamaño máximo */
+    width: min(480px, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* La animación va en la CARD, no en el dialog */
+  .modal[open] .modal-card {
+    animation: modalIn 0.24s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes modalIn {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Card */
+  .modal-card {
+    background: #161616;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 2.25rem 2rem 2rem;
+    position: relative;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  /* Glow decorativo */
+  .modal-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 120px;
+    background: radial-gradient(ellipse, rgba(113, 72, 252, 0.35) 0%, transparent 70%);
+    filter: blur(18px);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Botón cerrar */
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .modal-close:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+
+  /* Header */
+  .modal-header {
+    margin-bottom: 1.75rem;
+  }
+
+  .modal-badge {
+    display: inline-block;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #9D8CF4;
+    background: rgba(157, 140, 244, 0.1);
+    border: 1px solid rgba(157, 140, 244, 0.2);
+    border-radius: 4px;
+    padding: 0.25rem 0.65rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .modal-header h2 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.3rem, 3vw, 1.65rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-header p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* Formulario */
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .form-field label {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.01em;
+  }
+
+  .form-field input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9px;
+    padding: 0.7rem 0.95rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.9rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+  }
+
+  .form-field input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  .form-field input:focus {
+    border-color: rgba(113, 72, 252, 0.6);
+    background: rgba(113, 72, 252, 0.06);
+  }
+
+  .form-field input:user-invalid,
+  .form-field input.is-invalid {
+    border-color: rgba(248, 113, 113, 0.5);
+    background: rgba(248, 113, 113, 0.04);
+  }
+
+  /* Campo teléfono con prefijo */
+  .phone-wrap {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9px;
+    overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .phone-wrap:focus-within {
+    border-color: rgba(113, 72, 252, 0.6);
+    background: rgba(113, 72, 252, 0.06);
+  }
+
+  .phone-prefix {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.35);
+    padding: 0 0.75rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    white-space: nowrap;
+    line-height: 1;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+
+  .phone-wrap input {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding-left: 0.75rem;
+  }
+
+  .phone-wrap input:focus {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  /* Mensajes de error */
+  .field-error {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.73rem;
+    color: rgba(248, 113, 113, 0.9);
+  }
+
+  /* Botón submit */
+  .submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    margin-top: 0.25rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.925rem;
+    font-weight: 700;
+    border-radius: 9px;
+    background: #fff;
+    color: #161616;
+    border: 2px solid #fff;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .submit-btn:hover {
+    background: transparent;
+    color: #fff;
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Texto legal */
+  .modal-legal {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.22);
+    text-align: center;
+    margin-top: -0.25rem;
+  }
+
+  /* Mobile: ocupa casi toda la pantalla, centrado vertical */
+  @media (max-width: 480px) {
+    .modal {
+      width: calc(100vw - 1.5rem);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-height: calc(100dvh - 1.5rem);
+    }
+
+    .modal-card {
+      padding: 1.75rem 1.35rem 1.5rem;
+      border-radius: 16px;
+    }
+
+    .modal-header h2 {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
+<!-- ── Script ───────────────────────────────────────────────────── -->
+<script>
+  // ╔══════════════════════════════════════════════════════════════╗
+  // ║  CONFIGURACIÓN — actualiza estos valores cuando tengas      ║
+  // ║  el número real de WhatsApp de Uconex                       ║
+  // ╚══════════════════════════════════════════════════════════════╝
+  const WHATSAPP_NUMBER = '573118862990';
+  const waMessage = (_nombre: string) => `Hola, quiero agendar mi diagnóstico gratuito`;
+
+  // ── Guardar lead ────────────────────────────────────────────────
+  async function saveLead(data: Record<string, string>) {
+    // 1. localStorage — log local mientras conectas la base de datos
+    try {
+      const leads: unknown[] = JSON.parse(localStorage.getItem('uconex_leads') ?? '[]');
+      leads.push({ ...data, timestamp: new Date().toISOString() });
+      localStorage.setItem('uconex_leads', JSON.stringify(leads));
+    } catch (_) { /* si localStorage no está disponible */ }
+
+    // 2. TODO: cuando tengas la API lista, descomenta y ajusta:
+    // try {
+    //   await fetch('/api/leads', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(data),
+    //   });
+    // } catch (err) {
+    //   console.error('Error guardando lead:', err);
+    // }
+  }
+
+  // ── Referencias al DOM ──────────────────────────────────────────
+  const modal     = document.getElementById('contact-modal')  as HTMLDialogElement;
+  const form      = document.getElementById('contact-form')   as HTMLFormElement;
+  const closeBtn  = modal.querySelector('.modal-close')       as HTMLButtonElement;
+  const submitBtn = document.getElementById('modal-submit')   as HTMLButtonElement;
+
+  // ── Abrir modal ─────────────────────────────────────────────────
+  // Intercepta cualquier click en: [data-contact-modal], href="#contacto", href="/#contacto"
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>(
+      '[data-contact-modal], [href="#contacto"], [href="/#contacto"]'
+    );
+    if (!trigger) return;
+    e.preventDefault();
+    modal.showModal();
+    // Focus en el primer input
+    (modal.querySelector('input') as HTMLInputElement | null)?.focus();
+  });
+
+  // ── Cerrar modal ────────────────────────────────────────────────
+  closeBtn.addEventListener('click', () => modal.close());
+
+  // Cerrar al hacer clic en el backdrop (fuera de .modal-card)
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close();
+  });
+
+  // ── Validación simple ───────────────────────────────────────────
+  function showError(name: string, visible: boolean) {
+    const el = form.querySelector<HTMLElement>(`[data-for="${name}"]`);
+    if (el) el.hidden = !visible;
+
+    const input = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
+    if (input) input.classList.toggle('is-invalid', visible);
+  }
+
+  function validateForm(data: FormData): boolean {
+    let valid = true;
+
+    const nombre = data.get('nombre') as string;
+    if (!nombre || nombre.trim().length < 2) {
+      showError('nombre', true); valid = false;
+    } else showError('nombre', false);
+
+    const correo = data.get('correo') as string;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo ?? '');
+    if (!emailOk) {
+      showError('correo', true); valid = false;
+    } else showError('correo', false);
+
+    const whatsapp = data.get('whatsapp') as string;
+    if (!whatsapp || whatsapp.replace(/\D/g, '').length < 7) {
+      showError('whatsapp', true); valid = false;
+    } else showError('whatsapp', false);
+
+    return valid;
+  }
+
+  // ── Submit ──────────────────────────────────────────────────────
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fd   = new FormData(form);
+    const data = Object.fromEntries(fd.entries()) as Record<string, string>;
+
+    if (!validateForm(fd)) return;
+
+    // Estado de carga
+    submitBtn.disabled = true;
+    (submitBtn.querySelector('.submit-text') as HTMLElement).hidden = true;
+    (submitBtn.querySelector('.submit-loading') as HTMLElement).hidden = false;
+    (submitBtn.querySelector('.submit-icon') as HTMLElement).hidden = true;
+
+    await saveLead(data);
+
+    modal.close();
+    form.reset();
+
+    // Restaurar botón
+    submitBtn.disabled = false;
+    (submitBtn.querySelector('.submit-text') as HTMLElement).hidden = false;
+    (submitBtn.querySelector('.submit-loading') as HTMLElement).hidden = true;
+    (submitBtn.querySelector('.submit-icon') as HTMLElement).hidden = false;
+
+    // Redirigir a WhatsApp
+    const msg = encodeURIComponent(waMessage(data.nombre));
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank', 'noopener,noreferrer');
+  });
+</script>

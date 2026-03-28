@@ -1,0 +1,369 @@
+/* ===================================
+   UCONEX - Global Styles
+   =================================== */
+
+/* Tailwind v4 — CSS-first */
+@import "tailwindcss";
+
+/* ── Fuentes de marca ───────────────────────────────────────────────────────── */
+
+/* ITC Avant Garde Gothic Pro — Títulos y headlines */
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('/fonts/avant-garde/ITC Avant Garde Gothic Pro-Book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('/fonts/avant-garde/ITC Avant Garde Gothic Pro-Book Oblique.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('/fonts/avant-garde/ITC Avant Garde Gothic Pro-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('/fonts/avant-garde/ITC Avant Garde Gothic Pro-Medium Oblique.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('/fonts/avant-garde/ITC Avant Garde Gothic Pro-Demi.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('/fonts/avant-garde/ITC Avant Garde Gothic Pro-Demi Oblique.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('/fonts/avant-garde/ITC Avant Garde Gothic Pro-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Avant Garde';
+  src: url('/fonts/avant-garde/ITC Avant Garde Gothic Pro-Bold Oblique.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Graphie — Párrafos, subtítulos y cuerpo */
+@font-face {
+  font-family: 'Graphie';
+  src: url('/fonts/graphie/Graphie-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Graphie';
+  src: url('/fonts/graphie/Graphie-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Graphie';
+  src: url('/fonts/graphie/Graphie-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Graphie';
+  src: url('/fonts/graphie/Graphie-SemiBoldItalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Graphie';
+  src: url('/fonts/graphie/Graphie-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Graphie';
+  src: url('/fonts/graphie/Graphie-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Tailwind v4: colores y tipografías de marca ────────────────────────────── */
+@theme {
+  /* Paleta oficial Uconex */
+  --color-chrysier: #4924BC;
+  --color-majorelle: #7148FC;
+  --color-tropical: #9D8CF4;
+  --color-night:    #161616;
+
+  /* Fuentes de marca */
+  --font-heading: 'Avant Garde', sans-serif;
+  --font-body:    'Graphie',     sans-serif;
+}
+
+/* ── Utilidades CSS personalizadas ──────────────────────────────────────────── */
+@layer utilities {
+  .bg-grid-pattern {
+    --grid-color: rgba(255, 255, 255, 0.06);
+    background-image:
+      linear-gradient(0deg,   transparent 24%, var(--grid-color) 25%, var(--grid-color) 26%, transparent 27%, transparent 74%, var(--grid-color) 75%, var(--grid-color) 76%, transparent 77%, transparent),
+      linear-gradient(90deg,  transparent 24%, var(--grid-color) 25%, var(--grid-color) 26%, transparent 27%, transparent 74%, var(--grid-color) 75%, var(--grid-color) 76%, transparent 77%, transparent);
+    background-size: 60px 60px;
+  }
+
+  .mask-fade-down {
+    mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0.3) 50%, transparent 70%);
+  }
+}
+
+/* ── Variables CSS del sistema de diseño ────────────────────────────────────── */
+:root {
+  /* Colores funcionales */
+  --bg-primary:    #0a0a0a;
+  --bg-secondary:  #141414;
+  --bg-tertiary:   #1f1f1f;
+  --text-primary:  #ffffff;
+  --text-secondary:#a3a3a3;
+  --accent:        #3b82f6;
+  --accent-hover:  #2563eb;
+  --border-color:  #262626;
+  --purple:        #7c3aed;
+  --purple-hover:  #6d28d9;
+  --purple-glow:   rgba(109, 40, 217, 0.25);
+
+  /* Espaciado */
+  --spacing-xs:  0.5rem;
+  --spacing-sm:  1rem;
+  --spacing-md:  1.5rem;
+  --spacing-lg:  2rem;
+  --spacing-xl:  3rem;
+  --spacing-2xl: 4rem;
+
+  /* Tipografía */
+  --font-size-sm:   0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg:   1.125rem;
+  --font-size-xl:   1.25rem;
+  --font-size-2xl:  1.5rem;
+  --font-size-3xl:  2rem;
+  --font-size-4xl:  2.5rem;
+  --font-size-5xl:  3rem;
+
+  /* Otros */
+  --border-radius:    0.5rem;
+  --border-radius-lg: 1rem;
+  --transition:       0.2s ease;
+  --max-width:        1200px;
+}
+
+/* ── Reset básico ───────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+body {
+  font-family: 'Graphie', sans-serif;
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+}
+
+/* Headings: Avant Garde */
+h1, h2, h3 {
+  font-family: 'Avant Garde', sans-serif;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h4, h5, h6 {
+  font-family: 'Graphie', sans-serif;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+
+p {
+  font-family: 'Graphie', sans-serif;
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* ── Contenedor ─────────────────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+}
+
+/* ── Botones ────────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-family: 'Graphie', sans-serif;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--text-secondary);
+}
+
+/* ── Cards ──────────────────────────────────────────────────────────────────── */
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  transition: all var(--transition);
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+
+/* ── Formularios ────────────────────────────────────────────────────────────── */
+.form-group  { margin-bottom: var(--spacing-md); }
+
+.form-label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: var(--spacing-sm);
+  font-family: 'Graphie', sans-serif;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: border-color var(--transition);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ── Secciones ──────────────────────────────────────────────────────────────── */
+.section { padding: var(--spacing-2xl) 0; }
+
+.section-title {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.section-title h2 { margin-bottom: var(--spacing-sm); }
+
+.section-title p {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Grid ───────────────────────────────────────────────────────────────────── */
+.grid   { display: grid; gap: var(--spacing-lg); }
+
+.grid-3 { grid-template-columns: repeat(1, 1fr); }
+
+@media (min-width: 640px)  { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+
+/* ── Utilidades ─────────────────────────────────────────────────────────────── */
+.text-center { text-align: center; }
+.text-accent { color: var(--accent); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  :root {
+    --font-size-4xl: 3rem;
+    --font-size-5xl: 4rem;
+  }
+
+  .container { padding: 0 var(--spacing-lg); }
+}

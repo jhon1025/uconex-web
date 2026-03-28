@@ -1,0 +1,217 @@
+---
+const testimonios = [
+  {
+    iniciales: 'CM',
+    nombre: 'Carlos Mendoza',
+    negocio: 'Fundador, Distribuciones CMA',
+    quote: 'Antes respondíamos los mensajes de WhatsApp a mano y perdíamos muchos clientes. Con la automatización de Uconex, ahora respondemos en segundos y nuestras ventas aumentaron un 40% en dos meses.',
+    color: '#4924BC',
+  },
+  {
+    iniciales: 'LP',
+    nombre: 'Laura Pineda',
+    negocio: 'Dueña, Estética Natural LP',
+    quote: 'No sabía nada de pauta digital. Uconex me explicó todo de forma sencilla y en la primera semana ya estaba recibiendo leads por Facebook Ads. El diagnóstico gratuito fue clave para entender por dónde empezar.',
+    color: '#7148FC',
+  },
+  {
+    iniciales: 'AR',
+    nombre: 'Andrés Restrepo',
+    negocio: 'CEO, SportFit Colombia',
+    quote: 'Tenía un buen producto pero cero presencia digital. Uconex me construyó la landing page, configuró el CRM y armó las campañas. En 3 meses pasé de vender solo por Instagram a tener un sistema completo.',
+    color: '#4924BC',
+  },
+];
+---
+
+<section class="testimonios" id="testimonios">
+  <div class="container">
+
+    <div class="testimonios-header">
+      <span class="testimonios-label">Testimonios</span>
+      <h2>Lo que dicen nuestros clientes</h2>
+      <p>Emprendedores reales que decidieron dar el paso y digitalizar su negocio con nosotros.</p>
+    </div>
+
+    <div class="testimonios-grid">
+      {testimonios.map((t) => (
+        <article class="testimonial-card">
+
+          <!-- Estrellas -->
+          <div class="test-stars" aria-label="5 estrellas">
+            {'★'.repeat(5)}
+          </div>
+
+          <!-- Quote -->
+          <blockquote class="test-quote">
+            "{t.quote}"
+          </blockquote>
+
+          <!-- Autor -->
+          <footer class="test-author">
+            <div
+              class="test-avatar"
+              style={`background: ${t.color}1a; color: ${t.color}; border-color: ${t.color}30`}
+              aria-hidden="true"
+            >
+              {t.iniciales}
+            </div>
+            <div>
+              <div class="test-name">{t.nombre}</div>
+              <div class="test-role">{t.negocio}</div>
+            </div>
+          </footer>
+
+        </article>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── Sección ────────────────────────────────────────────────────────────── */
+  .testimonios {
+    background: #fff;
+    padding: 6rem 1.5rem;
+    border-top: 1px solid #ececec;
+  }
+
+  /* ── Encabezado ─────────────────────────────────────────────────────────── */
+  .testimonios-header {
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .testimonios-label {
+    display: inline-block;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7148FC;
+    background: rgba(113, 72, 252, 0.07);
+    border: 1px solid rgba(113, 72, 252, 0.18);
+    border-radius: 4px;
+    padding: 0.25rem 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .testimonios-header h2 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #161616;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .testimonios-header p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #6b6b76;
+  }
+
+  /* ── Grid ───────────────────────────────────────────────────────────────── */
+  .testimonios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  /* ── Card ───────────────────────────────────────────────────────────────── */
+  .testimonial-card {
+    border: 1px solid #e5e5ea;
+    border-radius: 14px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .testimonial-card:hover {
+    box-shadow: 0 6px 28px rgba(113, 72, 252, 0.08);
+    border-color: rgba(113, 72, 252, 0.2);
+    transform: translateY(-3px);
+  }
+
+  /* Estrellas */
+  .test-stars {
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: #7148FC;
+    margin-bottom: 1rem;
+  }
+
+  /* Quote */
+  .test-quote {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: #4b4b56;
+    font-style: italic;
+    flex-grow: 1;
+    margin: 0 0 1.5rem;
+    quotes: none;
+  }
+
+  /* Autor */
+  .test-author {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .test-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    letter-spacing: 0.03em;
+  }
+
+  .test-name {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #161616;
+    line-height: 1.3;
+  }
+
+  .test-role {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.78rem;
+    color: #999;
+    margin-top: 0.15rem;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .testimonios-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .testimonios {
+      padding: 4rem 1.25rem;
+    }
+
+    .testimonios-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

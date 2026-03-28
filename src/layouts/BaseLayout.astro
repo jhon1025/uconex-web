@@ -1,0 +1,82 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ContactModal from '../components/ContactModal.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Agencia de pauta digital, desarrollo web y automatizaciones' } = Astro.props;
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["Organization", "LocalBusiness"],
+      "@id": "https://uconex.co/#organization",
+      "name": "Uconex",
+      "url": "https://uconex.co",
+      "logo": "https://uconex.co/IsotipoPositivo.svg",
+      "description": "Uconex es una agencia de marketing digital y automatización con inteligencia artificial en Colombia. Ayudamos a negocios pequeños a escalar sus ventas con tecnología.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "CO",
+        "addressLocality": "Colombia"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Colombia"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "availableLanguage": "Spanish"
+      },
+      "sameAs": [
+        "https://www.instagram.com/uconex",
+        "https://www.linkedin.com/company/uconex"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Servicios de marketing digital y automatización",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Campañas de Facebook Ads e Instagram Ads" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Desarrollo de landing pages y sitios web" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Automatización de WhatsApp Business con n8n y Kommo CRM" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Chatbots con inteligencia artificial" } }
+        ]
+      }
+    }
+  ]
+};
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <link rel="icon" type="image/svg+xml" href="/IsotipoPositivo.svg">
+  <title>{title} | Uconex</title>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(orgSchema)} />
+  <slot name="head" />
+</head>
+<body>
+  <Header />
+  <main class="main-content">
+    <slot />
+  </main>
+  <Footer />
+  <ContactModal />
+</body>
+
+<style>
+  .main-content {
+    padding-top: 68px;
+  }
+</style>
+</html>

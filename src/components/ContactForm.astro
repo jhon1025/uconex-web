@@ -1,0 +1,92 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  title = 'Hablemos de tu proyecto',
+  subtitle = 'Cuéntanos qué necesitas y te contactaremos pronto'
+} = Astro.props;
+---
+
+<section class="contact section" id="contacto">
+  <div class="container">
+    <div class="contact-wrapper">
+      <div class="section-title">
+        <h2>{title}</h2>
+        <p>{subtitle}</p>
+      </div>
+      <form class="contact-form" action="#" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">Nombre</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-input"
+              placeholder="Tu nombre"
+              required
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="tu@email.com"
+              required
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">Mensaje</label>
+          <textarea
+            id="message"
+            name="message"
+            class="form-textarea"
+            placeholder="Cuéntanos sobre tu proyecto..."
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Enviar mensaje</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .contact-form {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .form-row {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  .btn-full {
+    width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .contact-form {
+      padding: var(--spacing-xl);
+    }
+  }
+</style>

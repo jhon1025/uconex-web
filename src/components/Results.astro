@@ -1,0 +1,241 @@
+---
+const stats = [
+  {
+    num: '+150%',
+    label: 'Aumento en leads\ncalificados',
+    color: '#9D8CF4',
+  },
+  {
+    num: '<30s',
+    label: 'Tiempo de respuesta\ncon automatización',
+    color: '#7148FC',
+  },
+  {
+    num: '3x',
+    label: 'Retorno en inversión\nde pauta digital',
+    color: '#9D8CF4',
+  },
+];
+
+const herramientas = [
+  { nombre: 'Meta', svg: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 24c0-5.2 1.6-9.4 4-12 2-2.2 4.6-3.2 7-3.2 2 0 3.8.7 5.6 2.2 1 .9 2.2 2.2 3.4 4 1.2-1.8 2.4-3.1 3.4-4 1.8-1.5 3.6-2.2 5.6-2.2 2.4 0 5 1 7 3.2 2.4 2.6 4 6.8 4 12 0 5.6-2 10.4-5 13.2-1.6 1.5-3.4 2.4-5.2 2.4-1.8 0-3.4-.7-5-2.2-1-.9-2-2.2-3.4-4.4-1.4 2.2-2.4 3.5-3.4 4.4-1.6 1.5-3.2 2.2-5 2.2-1.8 0-3.6-.9-5.2-2.4C10 34.4 8 29.6 8 24z" fill="white" fill-opacity="0.9"/></svg>` },
+  { nombre: 'WhatsApp', svg: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M24 8C15.2 8 8 15.2 8 24c0 2.8.7 5.5 2.1 7.9L8 40l8.4-2.1c2.3 1.2 4.9 1.9 7.6 1.9 8.8 0 16-7.2 16-16S32.8 8 24 8zm9.4 21.7c-.4 1-2 1.9-2.8 2-1.8.2-3.1-.4-7.5-2.4-5.4-2.4-8.6-7.8-8.9-8.2-.3-.4-2.2-3-2.2-5.7 0-2.7 1.4-4 1.9-4.6.5-.5 1-.7 1.4-.7h1c.4 0 .8.2 1.1.9.4 1 1.4 3.5 1.5 3.7.1.2.2.5 0 .8-.2.3-.3.5-.5.8-.2.3-.5.6-.7.8-.3.3-.5.6-.2 1.1.3.5 1.4 2.2 2.9 3.6 2 1.8 3.7 2.4 4.2 2.6.5.2.8.2 1.1-.1.3-.3 1.2-1.4 1.5-1.9.3-.5.7-.4 1.1-.2.5.2 2.9 1.4 3.4 1.6.5.2.8.4 1 .6.1.5.1 1.4-.3 2.3z" fill="white" fill-opacity="0.9"/></svg>` },
+  { nombre: 'n8n', svg: null },
+  { nombre: 'Kommo', svg: null },
+  { nombre: 'Astro', svg: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.4 33.4c-1.2-1.4-1.5-3.4-.9-5.8L20 16l2 7.4c.7 2.6.1 4.8-1.4 6.4-.7.8-1.6 1.3-2.6 1.3-.2 0-.4-.1-.6-.1-.6-.3-1-.8-1-1.6z" fill="white" fill-opacity="0.6"/><path d="M30 33c-1.8 0-3.2-1.4-3.6-3.4L24 20l-1.2 5.4c-.4 2-.2 3.8.6 5 .6.9 1.4 1.4 2.4 1.4 1.2 0 2.4-.8 3.2-2.2.5-.9.8-2 .8-3.2 0-.5 0-1-.2-1.4L28 20l2.4 9c.2.6.6 1 1 1.4.4.3.8.5 1.2.5.6 0 1-.3 1.2-.8.2-.4.2-1 0-1.6L30 18l2 8.6c.2.8.2 1.6-.1 2.4-.6 2.4-2 4-3.9 4z" fill="white" fill-opacity="0.9"/></svg>` },
+];
+---
+
+<section class="resultados" id="resultados">
+  <div class="container">
+
+    <!-- Encabezado -->
+    <div class="resultados-header">
+      <span class="resultados-label">Resultados</span>
+      <h2>Resultados que hablan por nosotros</h2>
+      <p>Números reales de nuestros clientes y proyectos.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      {stats.map((s) => (
+        <div class="stat-card">
+          <div class="stat-num" style={`color: ${s.color}`}>{s.num}</div>
+          <div class="stat-label">
+            {s.label.split('\n').map((line) => <span>{line}</span>)}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Barra de herramientas -->
+    <div class="tools-bar">
+      {herramientas.map((h) => (
+        <div class="tool-logo">
+          {h.svg
+            ? <span class="tool-icon" set:html={h.svg} />
+            : <span class="tool-text">{h.nombre}</span>
+          }
+          <span class="tool-name">{h.nombre}</span>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── Sección ────────────────────────────────────────────────────────────── */
+  .resultados {
+    background: #161616;
+    color: #fff;
+    padding: 6rem 1.5rem;
+  }
+
+  /* ── Encabezado ─────────────────────────────────────────────────────────── */
+  .resultados-header {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .resultados-label {
+    display: inline-block;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #9D8CF4;
+    background: rgba(157, 140, 244, 0.1);
+    border: 1px solid rgba(157, 140, 244, 0.2);
+    border-radius: 4px;
+    padding: 0.25rem 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .resultados-header h2 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .resultados-header p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* ── Stats grid ─────────────────────────────────────────────────────────── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .stat-card {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 2.25rem 1.5rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(113, 72, 252, 0.3);
+    background: rgba(113, 72, 252, 0.04);
+  }
+
+  .stat-num {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+
+  .stat-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* ── Barra de herramientas ──────────────────────────────────────────────── */
+  .tools-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .tool-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    padding: 0.55rem 1rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    cursor: default;
+  }
+
+  .tool-logo:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .tool-icon {
+    display: flex;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .tool-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .tool-text {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.04em;
+  }
+
+  .tool-name {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Ocultar nombre cuando hay svg (ya lo muestra el icono) — mostrar solo nombre */
+  .tool-icon + .tool-name {
+    display: block;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .resultados {
+      padding: 4rem 1.25rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .stat-card {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .tools-bar {
+      gap: 0.65rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tool-logo {
+      padding: 0.5rem 0.85rem;
+    }
+  }
+</style>

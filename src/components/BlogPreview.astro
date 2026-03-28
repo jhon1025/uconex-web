@@ -1,0 +1,276 @@
+---
+const posts = [
+  {
+    href: '/blog/post-2',
+    imagen: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=600&q=80',
+    categoria: 'Facebook Ads',
+    titulo: 'Guía completa de Facebook Ads para negocios pequeños en Colombia [2026]',
+    extracto: 'Todo lo que necesitas saber para crear, gestionar y optimizar campañas de Meta Ads desde cero con presupuestos pequeños.',
+  },
+  {
+    href: '/blog/post-3',
+    imagen: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=600&q=80',
+    categoria: 'Automatización',
+    titulo: 'Guía completa de automatización de WhatsApp Business para negocios [2026]',
+    extracto: 'Cómo implementar n8n + WhatsApp API + Kommo CRM para responder a cada lead al instante, sin esfuerzo manual.',
+  },
+  {
+    href: '/blog/post-1',
+    imagen: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80',
+    categoria: 'Marketing Digital',
+    titulo: '¿Cómo crear una estrategia de marketing digital para tu negocio en Colombia?',
+    extracto: 'Paso a paso para emprendedores que quieren profesionalizar su presencia digital y conseguir clientes en internet.',
+  },
+];
+---
+
+<section class="blog-preview" id="blog">
+  <div class="container">
+
+    <div class="blog-header">
+      <span class="blog-label">Blog</span>
+      <h2>Recursos para hacer crecer tu negocio</h2>
+      <p>Guías, estrategias y herramientas explicadas de forma simple para emprendedores.</p>
+    </div>
+
+    <div class="blog-grid">
+      {posts.map((post) => (
+        <article class="blog-card">
+          <a href={post.href} class="blog-img-link" tabindex="-1" aria-hidden="true">
+            <div class="blog-img">
+              <img src={post.imagen} alt={post.titulo} loading="lazy" />
+            </div>
+          </a>
+          <div class="blog-body">
+            <span class="blog-cat">{post.categoria}</span>
+            <h3>
+              <a href={post.href} class="blog-title-link">{post.titulo}</a>
+            </h3>
+            <p>{post.extracto}</p>
+            <a href={post.href} class="blog-link">
+              Leer artículo
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="blog-footer">
+      <a href="/blog" class="btn-all">
+        Ver todos los artículos
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── Sección ────────────────────────────────────────────────────────────── */
+  .blog-preview {
+    background: #fafafa;
+    padding: 6rem 1.5rem;
+    border-top: 1px solid #ececec;
+  }
+
+  /* ── Encabezado ─────────────────────────────────────────────────────────── */
+  .blog-header {
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .blog-label {
+    display: inline-block;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7148FC;
+    background: rgba(113, 72, 252, 0.07);
+    border: 1px solid rgba(113, 72, 252, 0.18);
+    border-radius: 4px;
+    padding: 0.25rem 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .blog-header h2 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #161616;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-header p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #6b6b76;
+  }
+
+  /* ── Grid ───────────────────────────────────────────────────────────────── */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  /* ── Card ───────────────────────────────────────────────────────────────── */
+  .blog-card {
+    background: #fff;
+    border: 1px solid #e5e5ea;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .blog-card:hover {
+    box-shadow: 0 6px 28px rgba(113, 72, 252, 0.09);
+    border-color: rgba(113, 72, 252, 0.22);
+    transform: translateY(-3px);
+  }
+
+  /* Imagen */
+  .blog-img-link {
+    display: block;
+  }
+
+  .blog-img {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: #e8e8ec;
+  }
+
+  .blog-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .blog-card:hover .blog-img img {
+    transform: scale(1.04);
+  }
+
+  /* Cuerpo */
+  .blog-body {
+    padding: 1.35rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .blog-cat {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #7148FC;
+    margin-bottom: 0.6rem;
+  }
+
+  .blog-title-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .blog-card h3 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #161616;
+    margin-bottom: 0.65rem;
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+  }
+
+  .blog-card:hover h3 {
+    color: #4924BC;
+  }
+
+  .blog-card p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.845rem;
+    line-height: 1.7;
+    color: #6b6b76;
+    flex-grow: 1;
+    margin-bottom: 1.1rem;
+  }
+
+  .blog-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #4924BC;
+    text-decoration: none;
+    transition: gap 0.2s ease, color 0.2s ease;
+    margin-top: auto;
+  }
+
+  .blog-link:hover {
+    gap: 0.55rem;
+    color: #7148FC;
+  }
+
+  /* ── CTA ver todos ──────────────────────────────────────────────────────── */
+  .blog-footer {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+
+  .btn-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #161616;
+    text-decoration: none;
+    border: 1.5px solid #d1d1d6;
+    border-radius: 8px;
+    padding: 0.7rem 1.4rem;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .btn-all:hover {
+    border-color: #7148FC;
+    color: #7148FC;
+    background: rgba(113, 72, 252, 0.04);
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blog-preview {
+      padding: 4rem 1.25rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

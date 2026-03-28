@@ -1,0 +1,196 @@
+---
+const servicios = [
+  {
+    emoji: '📢',
+    titulo: 'Campañas de Facebook Ads que convierten clics en clientes reales',
+    descripcion: 'Uconex diseña y gestiona campañas de publicidad en Facebook e Instagram Ads enfocadas en resultados medibles para negocios pequeños. Desde la segmentación de audiencias hasta la optimización del presupuesto.',
+    href: '/posts/post-2',
+  },
+  {
+    emoji: '🌐',
+    titulo: 'Landing pages y sitios web que convierten visitantes en compradores',
+    descripcion: 'Uconex crea sitios web y landing pages optimizados para conversión, velocidad de carga y experiencia móvil. Cada página con un objetivo claro: capturar leads o generar ventas.',
+    href: '#contacto',
+  },
+  {
+    emoji: '⚡',
+    titulo: 'Automatiza tu atención al cliente y no pierdas otro lead',
+    descripcion: 'Uconex implementa automatización de WhatsApp Business con n8n y Kommo CRM para que tu negocio responda instantáneamente a cada prospecto, las 24 horas del día.',
+    href: '/posts/post-3',
+  },
+  {
+    emoji: '🤖',
+    titulo: 'Un asistente virtual que atiende como tú, pero las 24 horas',
+    descripcion: 'Uconex crea chatbots con inteligencia artificial personalizados para tu negocio. Entienden preguntas naturales, resuelven dudas y derivan a un humano solo cuando es necesario.',
+    href: '#contacto',
+  },
+];
+---
+
+<section class="servicios" id="servicios">
+  <div class="container">
+
+    <!-- Encabezado -->
+    <div class="servicios-header">
+      
+      <h2>Soluciones que hacen crecer tu negocio</h2>
+      <p>Cada servicio está diseñado para resolver un problema específico de tu negocio. Puedes contratarlos individualmente o como un sistema completo.</p>
+    </div>
+
+    <!-- Grid 2×2 -->
+    <div class="services-grid">
+      {servicios.map((s) => (
+        <article class="service-card">
+          <div class="svc-icon" aria-hidden="true">{s.emoji}</div>
+          <h3>{s.titulo}</h3>
+          <p>{s.descripcion}</p>
+          <a href={s.href} class="svc-link">
+            Saber más
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </article>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── Sección ────────────────────────────────────────────────────────────── */
+  .servicios {
+    background: #fff;
+    padding: 6rem 1.5rem;
+  }
+
+  /* ── Encabezado ─────────────────────────────────────────────────────────── */
+  .servicios-header {
+    text-align: center;
+    max-width: 580px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .servicios-label {
+    display: inline-block;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7148FC;
+    background: rgba(113, 72, 252, 0.07);
+    border: 1px solid rgba(113, 72, 252, 0.18);
+    border-radius: 4px;
+    padding: 0.25rem 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .servicios-header h2 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #161616;
+    margin-bottom: 0.85rem;
+    line-height: 1.2;
+  }
+
+  .servicios-header p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #6b6b76;
+  }
+
+  /* ── Grid 2×2 ───────────────────────────────────────────────────────────── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  /* ── Card ───────────────────────────────────────────────────────────────── */
+  .service-card {
+    border: 1px solid #e5e5ea;
+    border-radius: 14px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    background: #fff;
+  }
+
+  .service-card:hover {
+    box-shadow: 0 6px 28px rgba(113, 72, 252, 0.1);
+    border-color: rgba(113, 72, 252, 0.25);
+    transform: translateY(-3px);
+  }
+
+  .svc-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 11px;
+    background: #f3f3f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    margin-bottom: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .service-card h3 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #161616;
+    margin-bottom: 0.65rem;
+    letter-spacing: -0.01em;
+  }
+
+  .service-card p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.75;
+    color: #6b6b76;
+    flex-grow: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .svc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #4924BC;
+    text-decoration: none;
+    transition: gap 0.2s ease, color 0.2s ease;
+    margin-top: auto;
+  }
+
+  .svc-link:hover {
+    gap: 0.55rem;
+    color: #7148FC;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .servicios {
+      padding: 4rem 1.25rem;
+    }
+
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .service-card {
+      padding: 1.35rem;
+    }
+  }
+</style>

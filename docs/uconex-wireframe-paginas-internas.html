@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uconex - Wireframe Páginas Internas (Blog + Testimonios)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1A1A1F;
+            background: #fff;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── ANNOTATION SYSTEM ── */
+        .section-tag {
+            display: inline-block;
+            background: #1A1A1F;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            padding: 4px 10px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .section-tag.light {
+            background: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.8);
+        }
+        .note {
+            background: #FFFBEB;
+            border: 1px dashed #E5C34A;
+            color: #92750C;
+            font-size: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        .schema-tag {
+            display: inline-block;
+            background: #EEF2FF;
+            border: 1px solid #C7D2FE;
+            color: #4338CA;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-top: 6px;
+            letter-spacing: 0.03em;
+        }
+        .triplet-tag {
+            display: inline-block;
+            background: #F0FDF4;
+            border: 1px solid #A7F3D0;
+            color: #065F46;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-top: 4px;
+        }
+        .page-tag {
+            display: inline-block;
+            background: #DC2626;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            padding: 6px 14px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* ── NAV ── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(26,26,31,0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 54px;
+        }
+        .nav-logo {
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: 0.08em;
+            color: #fff;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .nav-logo-icon {
+            width: 22px; height: 22px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 5px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; color: rgba(255,255,255,0.5);
+        }
+        .nav-links {
+            display: flex; gap: 26px; list-style: none;
+            font-size: 12.5px; font-weight: 500; color: rgba(255,255,255,0.5);
+        }
+        .nav-links .active { color: #fff; }
+        .nav-cta-btn {
+            background: #fff; color: #1A1A1F; border: none;
+            padding: 7px 18px; border-radius: 50px;
+            font-size: 11.5px; font-weight: 700; cursor: pointer;
+        }
+        @media (max-width: 768px) { .nav-links { display: none; } }
+
+        /* ── GLOBAL ── */
+        section { position: relative; padding: 80px 24px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 48px; }
+        .section-header h2 {
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 800; margin-bottom: 10px;
+        }
+        .section-header p {
+            font-size: 14px; color: #6B6B76;
+            max-width: 500px; margin: 0 auto; line-height: 1.6;
+        }
+
+        /* ══════════════════════════════════════════
+           PAGE DIVIDER (between wireframe pages)
+           ══════════════════════════════════════════ */
+        .page-divider {
+            background: #F0F0F0;
+            padding: 40px 24px;
+            text-align: center;
+            border-top: 3px solid #DC2626;
+            border-bottom: 3px solid #DC2626;
+        }
+        .page-divider h2 {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #DC2626;
+            margin-top: 10px;
+        }
+        .page-divider p {
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+        }
+
+        /* ══════════════════════════════════════════
+           TESTIMONIOS (nueva sección para Home)
+           ══════════════════════════════════════════ */
+        .testimonios {
+            background: #fff;
+            padding: 80px 24px;
+            border-top: 1px solid #ECECEC;
+        }
+        .testimonios-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .testimonial-card {
+            border: 1px solid #E5E5EA;
+            border-radius: 14px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+        }
+        .test-stars {
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            color: #999;
+        }
+        .test-quote {
+            font-size: 13px;
+            line-height: 1.75;
+            color: #4B4B56;
+            flex-grow: 1;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .test-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #F0F0F0;
+        }
+        .test-avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: #E8E8EC;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: #999; font-weight: 700;
+            flex-shrink: 0;
+        }
+        .test-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1A1A1F;
+        }
+        .test-role {
+            font-size: 11px;
+            color: #999;
+            margin-top: 1px;
+        }
+        @media (max-width: 768px) {
+            .testimonios-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ══════════════════════════════════════════
+           BLOG HERO
+           ══════════════════════════════════════════ */
+        .blog-hero {
+            background: #1A1A1F;
+            color: #fff;
+            padding: 60px 24px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .blog-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.04) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.04) 75%, rgba(255,255,255,0.04) 76%, transparent 77%),
+                linear-gradient(90deg, transparent 24%, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.04) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.04) 75%, rgba(255,255,255,0.04) 76%, transparent 77%);
+            background-size: 55px 55px;
+            -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+        }
+        .blog-hero-inner { position: relative; z-index: 2; }
+        .blog-hero h1 {
+            font-size: clamp(24px, 4vw, 38px);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .blog-hero p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.45);
+            max-width: 480px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ── BLOG FILTERS ── */
+        .blog-filters {
+            background: #FAFAFA;
+            border-bottom: 1px solid #ECECEC;
+            padding: 16px 24px;
+        }
+        .filters-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        .filter-tab {
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #D1D1D6;
+            background: #fff;
+            color: #6B6B76;
+            cursor: pointer;
+        }
+        .filter-tab.active {
+            background: #1A1A1F;
+            color: #fff;
+            border-color: #1A1A1F;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #D1D1D6;
+            border-radius: 8px;
+            padding: 6px 14px;
+            background: #fff;
+        }
+        .search-box span { font-size: 14px; color: #999; }
+        .search-box input {
+            border: none; outline: none;
+            font-size: 12px; font-family: inherit;
+            width: 160px; color: #333;
+        }
+
+        /* ── BLOG GRID (listing) ── */
+        .blog-listing {
+            padding: 48px 24px 80px;
+        }
+        .blog-grid-full {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .blog-card {
+            background: #fff;
+            border: 1px solid #E5E5EA;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .blog-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+        .blog-card.featured {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .blog-img {
+            width: 100%;
+            height: 170px;
+            background: #E8E8EC;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; color: #999; font-weight: 500;
+        }
+        .blog-card.featured .blog-img {
+            height: 100%;
+            min-height: 240px;
+        }
+        .blog-body { padding: 22px; }
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .blog-cat {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #1A1A1F;
+            background: #F3F3F5;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+        .blog-date {
+            font-size: 11px;
+            color: #999;
+        }
+        .blog-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 8px;
+        }
+        .blog-card.featured h3 { font-size: 20px; }
+        .blog-card p {
+            font-size: 12.5px;
+            line-height: 1.65;
+            color: #6B6B76;
+            margin-bottom: 14px;
+        }
+        .blog-link {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1A1A1F;
+            text-decoration: none;
+        }
+        .blog-pagination {
+            max-width: 1100px;
+            margin: 40px auto 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        .page-btn {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            border: 1px solid #D1D1D6;
+            background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 600; color: #6B6B76;
+            cursor: pointer;
+        }
+        .page-btn.active { background: #1A1A1F; color: #fff; border-color: #1A1A1F; }
+        @media (max-width: 768px) {
+            .blog-grid-full { grid-template-columns: 1fr; }
+            .blog-card.featured { grid-template-columns: 1fr; }
+        }
+
+        /* ══════════════════════════════════════════
+           BLOG SINGLE ARTICLE
+           ══════════════════════════════════════════ */
+        .article-hero {
+            background: #1A1A1F;
+            color: #fff;
+            padding: 50px 24px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .article-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.03) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03) 76%, transparent 77%),
+                linear-gradient(90deg, transparent 24%, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.03) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03) 76%, transparent 77%);
+            background-size: 55px 55px;
+            -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+        }
+        .article-hero-inner {
+            position: relative; z-index: 2;
+            max-width: 720px; margin: 0 auto;
+        }
+        .breadcrumb {
+            font-size: 11px;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 16px;
+        }
+        .breadcrumb a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+        }
+        .breadcrumb span { margin: 0 6px; }
+        .article-hero h1 {
+            font-size: clamp(22px, 3.5vw, 34px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 14px;
+        }
+        .article-meta-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .article-author-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .author-avatar-sm {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 700;
+        }
+        .author-name-sm { font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600; }
+        .article-date-sm { font-size: 11px; color: rgba(255,255,255,0.3); }
+        .read-time { font-size: 11px; color: rgba(255,255,255,0.3); }
+
+        /* ── ARTICLE BODY ── */
+        .article-layout {
+            padding: 48px 24px 80px;
+        }
+        .article-layout-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 720px 1fr;
+            gap: 48px;
+        }
+        .article-content {}
+        .article-sidebar {
+            position: sticky;
+            top: 80px;
+            align-self: start;
+        }
+
+        /* TL;DR */
+        .tldr {
+            background: #F7F7F8;
+            border-left: 3px solid #1A1A1F;
+            padding: 18px 20px;
+            margin-bottom: 32px;
+            border-radius: 0 8px 8px 0;
+        }
+        .tldr-label {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1A1A1F;
+            margin-bottom: 6px;
+        }
+        .tldr p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #4B4B56;
+        }
+
+        /* TOC sidebar */
+        .toc {
+            background: #F7F7F8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .toc-title {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #1A1A1F;
+            margin-bottom: 12px;
+        }
+        .toc-list {
+            list-style: none;
+        }
+        .toc-list li {
+            font-size: 12px;
+            color: #6B6B76;
+            padding: 6px 0;
+            border-bottom: 1px solid #ECECEC;
+            cursor: pointer;
+        }
+        .toc-list li:last-child { border-bottom: none; }
+        .toc-list li:hover { color: #1A1A1F; }
+
+        /* Author sidebar card */
+        .author-sidebar {
+            border: 1px solid #E5E5EA;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .author-avatar-lg {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: #E8E8EC;
+            margin: 0 auto 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; color: #999; font-weight: 700;
+        }
+        .author-sidebar h4 {
+            font-size: 14px; font-weight: 700; margin-bottom: 4px;
+        }
+        .author-sidebar .role {
+            font-size: 11px; color: #999; margin-bottom: 10px;
+        }
+        .author-sidebar p {
+            font-size: 11.5px; line-height: 1.6; color: #6B6B76;
+        }
+
+        /* Article fake content */
+        .fake-h2 {
+            font-size: 20px; font-weight: 800;
+            margin: 32px 0 12px; color: #1A1A1F;
+        }
+        .fake-h3 {
+            font-size: 16px; font-weight: 700;
+            margin: 24px 0 10px; color: #1A1A1F;
+        }
+        .fake-p {
+            font-size: 14px; line-height: 1.8;
+            color: #4B4B56; margin-bottom: 14px;
+        }
+        .fake-img {
+            width: 100%; height: 200px;
+            background: #E8E8EC;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; color: #999;
+            margin: 20px 0;
+        }
+
+        /* Internal FAQ */
+        .article-faq {
+            background: #F7F7F8;
+            border-radius: 12px;
+            padding: 28px;
+            margin: 32px 0;
+        }
+        .article-faq h3 {
+            font-size: 16px; font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .mini-faq-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #E5E5EA;
+        }
+        .mini-faq-item:last-child { border-bottom: none; }
+        .mini-faq-q {
+            font-size: 13px; font-weight: 700; margin-bottom: 6px;
+        }
+        .mini-faq-a {
+            font-size: 12.5px; line-height: 1.65; color: #6B6B76;
+        }
+
+        /* Article CTA */
+        .article-cta {
+            background: #1A1A1F;
+            color: #fff;
+            border-radius: 14px;
+            padding: 32px;
+            text-align: center;
+            margin: 32px 0;
+        }
+        .article-cta h3 {
+            font-size: 18px; font-weight: 800; margin-bottom: 8px;
+        }
+        .article-cta p {
+            font-size: 13px; color: rgba(255,255,255,0.5);
+            margin-bottom: 16px; line-height: 1.6;
+        }
+        .article-cta .btn-sm {
+            display: inline-block;
+            padding: 10px 24px;
+            background: #fff;
+            color: #1A1A1F;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* Related articles */
+        .related {
+            padding: 48px 24px 80px;
+            background: #FAFAFA;
+            border-top: 1px solid #ECECEC;
+        }
+        .related-grid {
+            max-width: 1100px;
+            margin: 32px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 900px) {
+            .article-layout-inner { grid-template-columns: 1fr; }
+            .related-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            background: #111114;
+            color: rgba(255,255,255,0.4);
+            padding: 48px 24px 32px;
+            font-size: 12px;
+        }
+        .footer-grid {
+            max-width: 1100px; margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .footer-brand {
+            font-size: 14px; font-weight: 800;
+            color: rgba(255,255,255,0.8); letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+        .footer-desc {
+            font-size: 12px; line-height: 1.6;
+            color: rgba(255,255,255,0.35); max-width: 280px;
+        }
+        .footer-col h5 {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.6); margin-bottom: 14px;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 8px; font-size: 12px; color: rgba(255,255,255,0.35); }
+        .footer-bottom {
+            max-width: 1100px; margin: 0 auto; padding-top: 20px;
+            display: flex; justify-content: space-between;
+            font-size: 11px; color: rgba(255,255,255,0.25);
+        }
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     PÁGINA 1: SECCIÓN TESTIMONIOS (se agrega al Home)
+     ════════════════════════════════════════════════════════ -->
+
+<div class="page-divider">
+    <span class="page-tag">Página 1 de 3</span>
+    <h2>Sección Testimonios — Se agrega al Home entre Resultados y FAQ</h2>
+    <p>Se ubica después de la sección S5 (Resultados) y antes de S6 (FAQ)</p>
+</div>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <div class="nav-logo"><div class="nav-logo-icon">U</div> UCONEX</div>
+        <ul class="nav-links">
+            <li>Servicios</li>
+            <li>Proceso</li>
+            <li>Blog</li>
+            <li>FAQ</li>
+        </ul>
+        <button class="nav-cta-btn">Contáctanos</button>
+    </div>
+</nav>
+
+<section class="testimonios">
+    <div class="container">
+        <span class="section-tag">S5.5 — TESTIMONIOS (NUEVA SECCIÓN HOME)</span>
+        <div class="section-header">
+            <h2>Lo que dicen nuestros clientes</h2>
+            <p>Emprendedores reales que decidieron dar el paso y digitalizar su negocio con nosotros.</p>
+            <span class="schema-tag">Schema: Review + AggregateRating</span>
+        </div>
+        <div class="testimonios-grid">
+            <div class="testimonial-card">
+                <div class="test-stars">★ ★ ★ ★ ★</div>
+                <div class="test-quote">"Antes respondíamos los mensajes de WhatsApp a mano y perdíamos muchos clientes. Con la automatización de Uconex, ahora respondemos en segundos y nuestras ventas aumentaron un 40% en dos meses."</div>
+                <div class="test-author">
+                    <div class="test-avatar">CM</div>
+                    <div>
+                        <div class="test-name">Carlos Mendoza</div>
+                        <div class="test-role">Fundador, Distribuciones CMA</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="test-stars">★ ★ ★ ★ ★</div>
+                <div class="test-quote">"No sabía nada de pauta digital. Uconex me explicó todo de forma sencilla y en la primera semana ya estaba recibiendo leads por Facebook Ads. El diagnóstico gratuito fue clave para entender por dónde empezar."</div>
+                <div class="test-author">
+                    <div class="test-avatar">LP</div>
+                    <div>
+                        <div class="test-name">Laura Pineda</div>
+                        <div class="test-role">Dueña, Estética Natural LP</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="test-stars">★ ★ ★ ★ ★</div>
+                <div class="test-quote">"Tenía un buen producto pero cero presencia digital. Uconex me construyó la landing page, configuró el CRM y armó las campañas. En 3 meses pasé de vender solo por Instagram a tener un sistema completo."</div>
+                <div class="test-author">
+                    <div class="test-avatar">AR</div>
+                    <div>
+                        <div class="test-name">Andrés Restrepo</div>
+                        <div class="test-role">CEO, SportFit Colombia</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:20px;">
+            <div class="note" style="max-width:500px;display:inline-block;">
+                Reemplazar con testimonios reales cuando estén disponibles. Incluir siempre: nombre completo, nombre del negocio, resultado específico con número. Los LLMs valoran evidencia concreta de E-E-A-T.
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:8px;">
+            <span class="triplet-tag">Clientes de Uconex [reportan] aumento en ventas tras implementar automatización de WhatsApp</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════
+     PÁGINA 2: BLOG PRINCIPAL (LISTING)
+     ════════════════════════════════════════════════════════ -->
+
+<div class="page-divider">
+    <span class="page-tag">Página 2 de 3</span>
+    <h2>Blog — Página Principal (Listing)</h2>
+    <p>URL: uconex.co/blog — Lista todos los artículos con filtros por categoría</p>
+</div>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <div class="nav-logo"><div class="nav-logo-icon">U</div> UCONEX</div>
+        <ul class="nav-links">
+            <li>Servicios</li>
+            <li>Proceso</li>
+            <li class="active">Blog</li>
+            <li>FAQ</li>
+        </ul>
+        <button class="nav-cta-btn">Contáctanos</button>
+    </div>
+</nav>
+
+<section class="blog-hero">
+    <div class="blog-hero-inner">
+        <span class="section-tag light">BLOG HERO</span>
+        <h1>Recursos para hacer crecer tu negocio</h1>
+        <p>Guías, estrategias y herramientas de marketing digital y automatización explicadas de forma simple para emprendedores colombianos.</p>
+        <div style="margin-top:10px;">
+            <span class="triplet-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);">
+                Uconex [publica] guías de marketing digital y automatización para emprendedores en Colombia
+            </span>
+        </div>
+    </div>
+</section>
+
+<div class="blog-filters">
+    <div class="filters-inner">
+        <div class="filter-tabs">
+            <div class="filter-tab active">Todos</div>
+            <div class="filter-tab">Facebook Ads</div>
+            <div class="filter-tab">Automatización</div>
+            <div class="filter-tab">Marketing Digital</div>
+        </div>
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="Buscar artículos...">
+        </div>
+    </div>
+</div>
+
+<div class="blog-listing">
+    <div class="blog-grid-full">
+
+        <!-- FEATURED -->
+        <div class="blog-card featured">
+            <div class="blog-img">[ Imagen destacada — artículo pilar ]</div>
+            <div class="blog-body" style="display:flex;flex-direction:column;justify-content:center;">
+                <div class="blog-meta">
+                    <span class="blog-cat">Facebook Ads</span>
+                    <span class="blog-date">Marzo 2026 · 15 min lectura</span>
+                </div>
+                <h3>Guía completa de Facebook Ads para negocios pequeños en Colombia [2026]</h3>
+                <p>Todo lo que necesitas saber para crear, gestionar y optimizar campañas de Meta Ads desde cero. Desde cuánto invertir hasta cómo medir resultados reales para tu negocio.</p>
+                <a class="blog-link">Leer guía completa →</a>
+                <br><span class="schema-tag">Schema: Article (pilar) + BreadcrumbList</span>
+            </div>
+        </div>
+
+        <!-- CARDS -->
+        <div class="blog-card">
+            <div class="blog-img">[ Imagen ]</div>
+            <div class="blog-body">
+                <div class="blog-meta">
+                    <span class="blog-cat">Automatización</span>
+                    <span class="blog-date">Mar 2026</span>
+                </div>
+                <h3>Guía completa de automatización de WhatsApp Business para negocios [2026]</h3>
+                <p>Cómo implementar n8n + WhatsApp API + Kommo CRM para responder al instante.</p>
+                <a class="blog-link">Leer artículo →</a>
+            </div>
+        </div>
+        <div class="blog-card">
+            <div class="blog-img">[ Imagen ]</div>
+            <div class="blog-body">
+                <div class="blog-meta">
+                    <span class="blog-cat">Marketing Digital</span>
+                    <span class="blog-date">Mar 2026</span>
+                </div>
+                <h3>¿Cómo crear una estrategia de marketing digital para tu negocio en Colombia?</h3>
+                <p>Paso a paso para emprendedores que quieren profesionalizar su presencia digital.</p>
+                <a class="blog-link">Leer artículo →</a>
+            </div>
+        </div>
+        <div class="blog-card">
+            <div class="blog-img">[ Imagen ]</div>
+            <div class="blog-body">
+                <div class="blog-meta">
+                    <span class="blog-cat">Facebook Ads</span>
+                    <span class="blog-date">Mar 2026</span>
+                </div>
+                <h3>¿Cuánto cuesta hacer pauta en Facebook en Colombia?</h3>
+                <p>Presupuestos reales, rangos de inversión y qué esperar según tu tipo de negocio.</p>
+                <a class="blog-link">Leer artículo →</a>
+            </div>
+        </div>
+        <div class="blog-card">
+            <div class="blog-img">[ Imagen ]</div>
+            <div class="blog-body">
+                <div class="blog-meta">
+                    <span class="blog-cat">Automatización</span>
+                    <span class="blog-date">Abr 2026</span>
+                </div>
+                <h3>¿Qué es n8n y cómo automatizar WhatsApp con esta herramienta?</h3>
+                <p>Guía práctica para entender n8n y crear tus primeros flujos de automatización.</p>
+                <a class="blog-link">Leer artículo →</a>
+            </div>
+        </div>
+        <div class="blog-card">
+            <div class="blog-img">[ Imagen ]</div>
+            <div class="blog-body">
+                <div class="blog-meta">
+                    <span class="blog-cat">Marketing Digital</span>
+                    <span class="blog-date">Abr 2026</span>
+                </div>
+                <h3>¿Qué es una landing page y por qué tu negocio necesita una?</h3>
+                <p>La diferencia entre tener un sitio web y tener una máquina de generar clientes.</p>
+                <a class="blog-link">Leer artículo →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="blog-pagination">
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">→</div>
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     PÁGINA 3: BLOG SINGLE (Artículo individual)
+     ════════════════════════════════════════════════════════ -->
+
+<div class="page-divider">
+    <span class="page-tag">Página 3 de 3</span>
+    <h2>Blog — Artículo Individual (Single Post)</h2>
+    <p>URL: uconex.co/blog/guia-facebook-ads-colombia — Plantilla para cada entrada del blog</p>
+</div>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <div class="nav-logo"><div class="nav-logo-icon">U</div> UCONEX</div>
+        <ul class="nav-links">
+            <li>Servicios</li>
+            <li>Proceso</li>
+            <li class="active">Blog</li>
+            <li>FAQ</li>
+        </ul>
+        <button class="nav-cta-btn">Contáctanos</button>
+    </div>
+</nav>
+
+<section class="article-hero">
+    <div class="article-hero-inner">
+        <span class="section-tag light">ARTICLE HERO</span>
+        <div class="breadcrumb">
+            <a>Inicio</a> <span>/</span> <a>Blog</a> <span>/</span> <a>Facebook Ads</a> <span>/</span> Guía completa
+            <br><span class="schema-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);">Schema: BreadcrumbList</span>
+        </div>
+        <h1>Guía completa de Facebook Ads para negocios pequeños en Colombia [2026]</h1>
+        <div class="article-meta-bar">
+            <div class="article-author-chip">
+                <div class="author-avatar-sm">J</div>
+                <span class="author-name-sm">Jhon — Fundador de Uconex</span>
+            </div>
+            <span class="article-date-sm">Publicado: Mar 10, 2026</span>
+            <span class="article-date-sm">Actualizado: Mar 10, 2026</span>
+            <span class="read-time">15 min lectura</span>
+        </div>
+        <div style="margin-top:10px;">
+            <span class="schema-tag" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);">Schema: Article + Person (author) + Organization (publisher)</span>
+        </div>
+    </div>
+</section>
+
+<div class="article-layout">
+    <div class="article-layout-inner">
+
+        <!-- ── ARTICLE CONTENT ── -->
+        <div class="article-content">
+
+            <!-- TL;DR -->
+            <div class="tldr">
+                <div class="tldr-label">TL;DR — Resumen rápido (50-70 palabras)</div>
+                <p>Facebook Ads es la plataforma de publicidad digital más efectiva para negocios pequeños en Colombia. Con una inversión desde $300.000 COP mensuales, puedes llegar a tu público objetivo, generar leads calificados y medir cada peso invertido. Esta guía te explica paso a paso cómo crear, gestionar y optimizar tus campañas para obtener resultados reales.</p>
+                <div class="note" style="margin-top:8px;">Este resumen es lo primero que los LLMs extraen. Debe responder la pregunta directamente en 50-70 palabras.</div>
+            </div>
+
+            <!-- Imagen destacada -->
+            <div class="fake-img">[ Imagen destacada del artículo — 1200x630px ]</div>
+
+            <!-- Contenido -->
+            <h2 class="fake-h2">¿Qué son los Facebook Ads y por qué funcionan para negocios pequeños?</h2>
+            <p class="fake-p">Facebook Ads (ahora Meta Ads) es la plataforma de publicidad de Meta que permite a negocios de cualquier tamaño crear campañas dirigidas a audiencias específicas en Facebook e Instagram. Para negocios pequeños en Colombia, es una de las herramientas más rentables porque permite segmentar por ubicación, intereses y comportamiento de compra.</p>
+            <p class="fake-p">A diferencia de publicar contenido orgánico en redes sociales, Facebook Ads te permite llegar a personas que aún no te conocen pero que ya están buscando lo que ofreces. Es la diferencia entre esperar a que te encuentren y salir a buscar a tus clientes.</p>
+            <div style="margin-bottom:12px;">
+                <span class="triplet-tag">Facebook Ads [es] la plataforma de publicidad más efectiva para negocios pequeños en Colombia</span>
+            </div>
+
+            <h2 class="fake-h2">¿Cuánto cuesta hacer pauta en Facebook en Colombia?</h2>
+            <p class="fake-p">El presupuesto mínimo recomendado para campañas de Facebook Ads en Colombia es de $300.000 a $500.000 COP mensuales para negocios pequeños que están comenzando. Este presupuesto permite testear audiencias, creativos y mensajes para encontrar la combinación que mejor funciona.</p>
+
+            <div class="fake-img">[ Tabla de presupuestos recomendados por tipo de negocio ]</div>
+
+            <h3 class="fake-h3">Factores que afectan el costo de tus campañas</h3>
+            <p class="fake-p">El costo por resultado depende de la industria, la competencia, la calidad del anuncio y la segmentación. En promedio, un lead cualificado en Colombia puede costar entre $2.000 y $15.000 COP dependiendo del sector.</p>
+
+            <h2 class="fake-h2">¿Cómo crear tu primera campaña paso a paso?</h2>
+            <p class="fake-p">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Esta sección continuaría con el paso a paso detallado...</p>
+
+            <!-- FAQ interna del artículo -->
+            <div class="article-faq">
+                <h3>Preguntas frecuentes sobre Facebook Ads en Colombia</h3>
+                <span class="schema-tag">Schema: FAQPage — Cada pregunta activa AI Overviews</span>
+                <div class="mini-faq-item">
+                    <div class="mini-faq-q">¿Es mejor Facebook Ads o Google Ads para mi negocio?</div>
+                    <div class="mini-faq-a">Depende de tu tipo de negocio. Facebook Ads funciona mejor para generar demanda en productos o servicios que la gente no busca activamente. Google Ads funciona mejor cuando la gente ya está buscando tu solución. Para la mayoría de negocios pequeños en Colombia, Facebook Ads es el mejor punto de partida por su bajo costo de entrada.</div>
+                </div>
+                <div class="mini-faq-item">
+                    <div class="mini-faq-q">¿Necesito una página web para hacer Facebook Ads?</div>
+                    <div class="mini-faq-a">No necesariamente, pero sí es altamente recomendable. Puedes dirigir tráfico a WhatsApp o a formularios de Facebook, pero una landing page optimizada aumenta significativamente la tasa de conversión.</div>
+                </div>
+                <div class="mini-faq-item">
+                    <div class="mini-faq-q">¿Cuánto tiempo toma ver resultados con Facebook Ads?</div>
+                    <div class="mini-faq-a">Los primeros resultados se ven en las primeras 48-72 horas. Sin embargo, la optimización real de las campañas toma entre 2 y 4 semanas, cuando el algoritmo de Meta tiene suficientes datos para entregar tus anuncios a las personas con mayor probabilidad de conversión.</div>
+                </div>
+            </div>
+
+            <!-- CTA del artículo -->
+            <div class="article-cta">
+                <h3>¿Quieres que gestionemos tus campañas de Facebook Ads?</h3>
+                <p>En Uconex nos especializamos en crear y optimizar campañas de Meta Ads para negocios pequeños en Colombia. Empieza con un diagnóstico gratuito.</p>
+                <a class="btn-sm">Quiero mi diagnóstico gratis →</a>
+            </div>
+
+        </div>
+
+        <!-- ── SIDEBAR ── -->
+        <div class="article-sidebar">
+
+            <div class="toc">
+                <div class="toc-title">Tabla de contenidos</div>
+                <ul class="toc-list">
+                    <li>¿Qué son los Facebook Ads?</li>
+                    <li>¿Cuánto cuesta hacer pauta?</li>
+                    <li>Cómo crear tu primera campaña</li>
+                    <li>Segmentación de audiencias</li>
+                    <li>Optimización y métricas</li>
+                    <li>Errores comunes</li>
+                    <li>Preguntas frecuentes</li>
+                </ul>
+            </div>
+
+            <div class="author-sidebar">
+                <div class="author-avatar-lg">J</div>
+                <h4>Jhon</h4>
+                <div class="role">Fundador de Uconex</div>
+                <p>Especialista en Facebook Ads y automatización con IA. Ayuda a negocios pequeños en Colombia a escalar sus ventas con tecnología.</p>
+                <div style="margin-top:10px;">
+                    <span class="schema-tag">Schema: Person + knowsAbout (E-E-A-T)</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Related articles -->
+<div class="related">
+    <div class="container">
+        <span class="section-tag">ARTÍCULOS RELACIONADOS</span>
+        <div class="section-header" style="text-align:left;">
+            <h2 style="font-size:20px;">Sigue aprendiendo</h2>
+            <p>Artículos del mismo cluster que refuerzan autoridad temática.</p>
+        </div>
+        <div class="related-grid">
+            <div class="blog-card">
+                <div class="blog-img">[ Imagen ]</div>
+                <div class="blog-body">
+                    <div class="blog-meta"><span class="blog-cat">Facebook Ads</span></div>
+                    <h3>¿Cuánto cuesta hacer pauta en Facebook en Colombia?</h3>
+                    <p>Presupuestos reales y rangos de inversión según tu tipo de negocio.</p>
+                    <a class="blog-link">Leer →</a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="blog-img">[ Imagen ]</div>
+                <div class="blog-body">
+                    <div class="blog-meta"><span class="blog-cat">Facebook Ads</span></div>
+                    <h3>Facebook Ads vs. Google Ads: ¿cuál es mejor para negocios pequeños?</h3>
+                    <p>Comparativa directa para que elijas la mejor opción.</p>
+                    <a class="blog-link">Leer →</a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="blog-img">[ Imagen ]</div>
+                <div class="blog-body">
+                    <div class="blog-meta"><span class="blog-cat">Facebook Ads</span></div>
+                    <h3>¿Cómo crear un embudo de ventas con Facebook Ads?</h3>
+                    <p>Estructura tu estrategia para convertir desconocidos en clientes.</p>
+                    <a class="blog-link">Leer →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <div class="footer-brand">✦ UCONEX</div>
+            <p class="footer-desc">Uconex es una agencia de marketing digital y automatización con inteligencia artificial en Colombia. Ayudamos a negocios pequeños a escalar sus ventas con tecnología.</p>
+        </div>
+        <div class="footer-col">
+            <h5>Servicios</h5>
+            <ul>
+                <li>Facebook Ads</li>
+                <li>Desarrollo Web</li>
+                <li>Automatización</li>
+                <li>Chatbots con IA</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Recursos</h5>
+            <ul>
+                <li>Blog</li>
+                <li>Guías gratuitas</li>
+                <li>Casos de éxito</li>
+                <li>FAQ</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Contacto</h5>
+            <ul>
+                <li>WhatsApp</li>
+                <li>Instagram</li>
+                <li>LinkedIn</li>
+                <li>Email</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 Uconex. Todos los derechos reservados.</span>
+        <span>Política de privacidad · Términos</span>
+    </div>
+</footer>
+
+</body>
+</html>

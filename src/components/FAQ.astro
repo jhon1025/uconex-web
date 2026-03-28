@@ -1,0 +1,244 @@
+---
+const faqs = [
+  {
+    pregunta: '¿Qué es Uconex y qué servicios ofrece?',
+    respuesta: 'Uconex es una agencia de marketing digital y automatización con inteligencia artificial en Colombia. Ofrecemos cuatro servicios principales: campañas de publicidad en Facebook Ads e Instagram Ads, desarrollo de landing pages y sitios web optimizados para conversión, automatización de WhatsApp Business con n8n y Kommo CRM, y creación de chatbots con IA para atención al cliente 24/7.',
+  },
+  {
+    pregunta: '¿Cuánto cuesta contratar a Uconex?',
+    respuesta: 'Los planes de Uconex se adaptan al tamaño y necesidades de cada negocio. Ofrecemos desde servicios individuales como una landing page o una campaña de pauta, hasta planes completos que incluyen automatización, CRM y publicidad. El primer paso es el diagnóstico gratuito, donde analizamos tu negocio y te presentamos una propuesta personalizada con precios transparentes.',
+  },
+  {
+    pregunta: '¿Por qué Uconex y no otra agencia de marketing digital?',
+    respuesta: 'A diferencia de agencias tradicionales que solo manejan redes sociales, Uconex combina marketing digital, automatización con IA y desarrollo web en un solo lugar. Trabajamos exclusivamente con pequeños negocios en Colombia, lo que nos permite entender el mercado local. Además, medimos resultados reales: leads generados, costo por cliente y retorno de inversión, no métricas de vanidad como likes o alcance.',
+  },
+  {
+    pregunta: '¿Qué herramientas utiliza Uconex para la automatización?',
+    respuesta: 'Uconex utiliza n8n como plataforma de automatización de flujos de trabajo, Kommo CRM para gestión de clientes y seguimiento de ventas, WhatsApp Business API para respuestas automáticas a prospectos, y modelos de inteligencia artificial para crear chatbots personalizados. Todas las herramientas se integran entre sí para crear un sistema de atención y ventas completamente automatizado.',
+  },
+  {
+    pregunta: '¿Uconex trabaja solo con negocios en Colombia?',
+    respuesta: 'Actualmente, Uconex trabaja principalmente con negocios pequeños en Colombia, especialmente en ciudades como Bogotá, Medellín, Cali y Barranquilla. Sin embargo, al ser una agencia digital, podemos trabajar de forma remota con negocios en cualquier país de habla hispana. Si tienes un negocio fuera de Colombia y te interesa nuestro servicio, escríbenos y evaluamos tu caso.',
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.pregunta,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": f.respuesta,
+    },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="faq" id="faq">
+  <div class="container">
+
+    <div class="faq-header">
+      <span class="faq-label">FAQ</span>
+      <h2>Preguntas frecuentes</h2>
+      <p>Todo lo que necesitas saber antes de dar el primer paso.</p>
+    </div>
+
+    <div class="faq-list">
+      {faqs.map((f, i) => (
+        <div class="faq-item" data-faq={i}>
+          <button class="faq-trigger" aria-expanded="false" aria-controls={`faq-answer-${i}`}>
+            <span class="faq-question">{f.pregunta}</span>
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" id={`faq-answer-${i}`} role="region" hidden>
+            <p>{f.respuesta}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── Sección ────────────────────────────────────────────────────────────── */
+  .faq {
+    background: #fff;
+    padding: 6rem 1.5rem;
+    border-top: 1px solid #ececec;
+  }
+
+  /* ── Encabezado ─────────────────────────────────────────────────────────── */
+  .faq-header {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .faq-label {
+    display: inline-block;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7148FC;
+    background: rgba(113, 72, 252, 0.07);
+    border: 1px solid rgba(113, 72, 252, 0.18);
+    border-radius: 4px;
+    padding: 0.25rem 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .faq-header h2 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #161616;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-header p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #6b6b76;
+  }
+
+  /* ── Lista ───────────────────────────────────────────────────────────────── */
+  .faq-list {
+    max-width: 740px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ── Item ────────────────────────────────────────────────────────────────── */
+  .faq-item {
+    border-bottom: 1px solid #e5e5ea;
+  }
+
+  .faq-item:first-child {
+    border-top: 1px solid #e5e5ea;
+  }
+
+  /* ── Trigger ─────────────────────────────────────────────────────────────── */
+  .faq-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.35rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .faq-question {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #161616;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+  }
+
+  .faq-trigger:hover .faq-question {
+    color: #7148FC;
+  }
+
+  .faq-icon {
+    flex-shrink: 0;
+    color: #9D8CF4;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease, color 0.2s ease;
+  }
+
+  /* Open state */
+  .faq-trigger[aria-expanded="true"] .faq-icon {
+    transform: rotate(180deg);
+    color: #7148FC;
+  }
+
+  .faq-trigger[aria-expanded="true"] .faq-question {
+    color: #4924BC;
+  }
+
+  /* ── Answer ──────────────────────────────────────────────────────────────── */
+  .faq-answer {
+    overflow: hidden;
+  }
+
+  .faq-answer[hidden] {
+    display: none;
+  }
+
+  .faq-answer p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #4b4b56;
+    padding-bottom: 1.35rem;
+    margin: 0;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .faq {
+      padding: 4rem 1.25rem;
+    }
+
+    .faq-question {
+      font-size: 0.875rem;
+    }
+
+    .faq-answer p {
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>('.faq-item');
+
+  items.forEach((item) => {
+    const trigger = item.querySelector<HTMLButtonElement>('.faq-trigger');
+    const answer = item.querySelector<HTMLElement>('.faq-answer');
+    if (!trigger || !answer) return;
+
+    trigger.addEventListener('click', () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+      // Close all
+      items.forEach((other) => {
+        const t = other.querySelector<HTMLButtonElement>('.faq-trigger');
+        const a = other.querySelector<HTMLElement>('.faq-answer');
+        if (t && a) {
+          t.setAttribute('aria-expanded', 'false');
+          a.hidden = true;
+        }
+      });
+
+      // Toggle clicked
+      if (!isOpen) {
+        trigger.setAttribute('aria-expanded', 'true');
+        answer.hidden = false;
+      }
+    });
+  });
+</script>

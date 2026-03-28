@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uconex Hero - Alta Fidelidad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --purple-primary: #7C3AED;
+            --purple-light: #8B5CF6;
+            --purple-dark: #6D28D9;
+            --purple-glow: rgba(124, 58, 237, 0.4);
+            --bg-dark: #0A0A0F;
+            --bg-mid: #0F0F1A;
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.65);
+            --grid-color: rgba(255, 255, 255, 0.06);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* ============================================
+           GRID PATTERN LAYER
+           El truco: dos linear-gradients perpendiculares
+           que crean la cuadrícula. Se aplica con un 
+           pseudo-elemento para poder controlar su 
+           opacidad y fade independientemente.
+           ============================================ */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            
+            /* === GRID PATTERN CSS PURO === */
+            background-image:
+                /* Líneas horizontales */
+                linear-gradient(
+                    0deg,
+                    transparent 24%,
+                    var(--grid-color) 25%,
+                    var(--grid-color) 26%,
+                    transparent 27%,
+                    transparent 74%,
+                    var(--grid-color) 75%,
+                    var(--grid-color) 76%,
+                    transparent 77%,
+                    transparent
+                ),
+                /* Líneas verticales */
+                linear-gradient(
+                    90deg,
+                    transparent 24%,
+                    var(--grid-color) 25%,
+                    var(--grid-color) 26%,
+                    transparent 27%,
+                    transparent 74%,
+                    var(--grid-color) 75%,
+                    var(--grid-color) 76%,
+                    transparent 77%,
+                    transparent
+                );
+            background-size: 60px 60px;
+            
+            /* FADE: el grid se desvanece hacia abajo */
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 0.7) 30%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0) 70%
+            );
+            mask-image: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 0.7) 30%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0) 70%
+            );
+        }
+
+        /* ============================================
+           GLOW EFFECT - Resplandor morado inferior
+           ============================================ */
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 60%;
+            background: radial-gradient(
+                ellipse at center,
+                var(--purple-glow) 0%,
+                rgba(124, 58, 237, 0.15) 30%,
+                rgba(124, 58, 237, 0.05) 50%,
+                transparent 70%
+            );
+            z-index: 1;
+            filter: blur(40px);
+            pointer-events: none;
+        }
+
+        /* ============================================
+           CONTENIDO
+           ============================================ */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Logo */
+        .hero-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--purple-light);
+        }
+
+        .hero-logo svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Título principal */
+        .hero-title {
+            font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        /* Badge "Inteligencia Artificial" */
+        .hero-highlight {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple-primary) 50%, var(--purple-light) 100%);
+            padding: 0.25em 0.8em;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 
+                0 0 30px rgba(124, 58, 237, 0.3),
+                0 0 60px rgba(124, 58, 237, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        /* Subtítulo */
+        .hero-subtitle {
+            font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            font-weight: 400;
+        }
+
+        .hero-subtitle strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Tags de servicios */
+        .hero-tags {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-tag {
+            padding: 0.4em 1.2em;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .hero-tag:hover {
+            border-color: var(--purple-light);
+            color: var(--text-primary);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        /* Botones CTA */
+        .hero-ctas {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.85em 2.2em;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-dark);
+            border: 2px solid var(--text-primary);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--text-primary);
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--purple-light);
+            background: rgba(124, 58, 237, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 100svh; /* safe viewport height para móvil */
+            }
+
+            .hero::before {
+                background-size: 45px 45px; /* grid más pequeño en móvil */
+            }
+
+            .hero-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .hero-title {
+                font-size: clamp(1.8rem, 8vw, 2.5rem);
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .hero-tags {
+                gap: 0.5rem;
+            }
+
+            .hero-tag {
+                font-size: 0.78rem;
+                padding: 0.35em 1em;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero::before {
+                background-size: 35px 35px;
+            }
+
+            .hero-highlight {
+                font-size: 0.9em;
+                padding: 0.2em 0.6em;
+                border-radius: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="hero-content">
+            
+            <!-- Logo -->
+            <div class="hero-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                UCONEX
+            </div>
+
+            <!-- Título -->
+            <h1 class="hero-title">
+                Escalamos tu negocio<br>
+                con marketing e<br>
+                <span class="hero-highlight">Inteligencia Artificial</span>
+            </h1>
+
+            <!-- Subtítulo -->
+            <p class="hero-subtitle">
+                ¿Quieres llegar a tus objetivos de ventas? Nosotros escalamos, diversificamos y 
+                automatizamos tus ventas. <strong>Somos tu partner en crecimiento exponencial</strong>
+            </p>
+
+            <!-- Tags -->
+            <div class="hero-tags">
+                <span class="hero-tag">Pauta digital</span>
+                <span class="hero-tag">Desarrollo web</span>
+                <span class="hero-tag">Automatización</span>
+            </div>
+
+            <!-- CTAs -->
+            <div class="hero-ctas">
+                <a href="#contacto" class="btn btn-primary">Contáctanos</a>
+                <a href="#soluciones" class="btn btn-secondary">Ver soluciones</a>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

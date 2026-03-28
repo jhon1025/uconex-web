@@ -1,0 +1,1120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+/* ── Static paths ─────────────────────────────────────────────────── */
+export async function getStaticPaths() {
+  const postFiles = import.meta.glob('/src/pages/posts/*.md', { eager: true });
+
+  const entries = Object.entries(postFiles).map(([path, mod]: [string, any]) => ({
+    slug: path.split('/').pop()!.replace('.md', ''),
+    mod,
+  }));
+
+  return entries.map(({ slug, mod }) => ({
+    params: { slug },
+    props: { mod, allMods: entries },
+  }));
+}
+
+/* ── Types ────────────────────────────────────────────────────────── */
+interface Heading { depth: number; slug: string; text: string }
+interface PostEntry { slug: string; mod: any }
+interface Props { mod: any; allMods: PostEntry[] }
+
+const { mod, allMods } = Astro.props as Props;
+const { slug } = Astro.params;
+
+const fm           = mod.frontmatter;
+const headings     = (mod.getHeadings() as Heading[]).filter(h => h.depth <= 3);
+const h2Headings   = headings.filter(h => h.depth === 2);
+const rawContent   = mod.rawContent() as string;
+const compiled     = mod.compiledContent() as string;
+
+/* ── Helpers ──────────────────────────────────────────────────────── */
+function formatDate(d: string) {
+  return new Date(d).toLocaleDateString('es-ES', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  });
+}
+
+function readingTime(raw: string) {
+  const mins = Math.ceil(raw.trim().split(/\s+/).length / 200);
+  return `${mins} min lectura`;
+}
+
+function initials(name: string) {
+  return name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+}
+
+function getCategoria(tags: string[]): string {
+  if (tags.some(t => ['Pauta Digital', 'Meta Ads', 'Facebook Ads', 'Google Ads'].includes(t)))
+    return 'Facebook Ads';
+  if (tags.some(t => ['Automatización', 'Inteligencia Artificial', 'Productividad'].includes(t)))
+    return 'Automatización';
+  return 'Marketing Digital';
+}
+
+/* ── Parse FAQ from rawContent ────────────────────────────────────── */
+function parseFaq(raw: string): { q: string; a: string }[] {
+  const start = raw.indexOf('## Preguntas frecuentes');
+  if (start === -1) return [];
+
+  const lines = raw.slice(start).split('\n');
+  const faqs: { q: string; a: string }[] = [];
+  let i = 1;
+
+  while (i < lines.length) {
+    const qm = lines[i].match(/^\*\*(.+?\??)\*\*\s*$/);
+    if (qm) {
+      const q = qm[1].trim();
+      const ans: string[] = [];
+      i++;
+      while (
+        i < lines.length &&
+        !lines[i].match(/^\*\*/) &&
+        !lines[i].startsWith('## ') &&
+        !lines[i].startsWith('---')
+      ) {
+        if (lines[i].trim()) ans.push(lines[i].trim());
+        i++;
+      }
+      if (ans.length) faqs.push({ q, a: ans.join(' ') });
+    } else {
+      i++;
+    }
+  }
+  return faqs;
+}
+
+const faqs = parseFaq(rawContent);
+
+/* ── Related posts ────────────────────────────────────────────────── */
+const related = allMods
+  .filter(p => p.slug !== slug)
+  .slice(0, 3)
+  .map(p => ({
+    href:      `/blog/${p.slug}`,
+    titulo:    p.mod.frontmatter.title as string,
+    extracto:  p.mod.frontmatter.description as string,
+    fecha:     formatDate(String(p.mod.frontmatter.pubDate)),
+    categoria: getCategoria(p.mod.frontmatter.tags || []),
+    imagen:    (p.mod.frontmatter.image?.url  as string) || '',
+    alt:       (p.mod.frontmatter.image?.alt  as string) || p.mod.frontmatter.title,
+  }));
+
+/* ── Derived values ───────────────────────────────────────────────── */
+const authorName      = (fm.author as string) || 'Equipo Uconex';
+const pubDateFormatted = formatDate(String(fm.pubDate));
+const readTime        = readingTime(rawContent);
+const categoria       = getCategoria(fm.tags || []);
+
+/* ── Schemas ──────────────────────────────────────────────────────── */
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: fm.title,
+  description: fm.description,
+  datePublished: fm.pubDate,
+  dateModified:  fm.pubDate,
+  image: fm.image?.url,
+  url: `https://uconex.co/blog/${slug}`,
+  author: {
+    '@type': 'Person',
+    name: authorName,
+    jobTitle: 'Especialista en Marketing Digital',
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Uconex',
+      url: 'https://uconex.co',
+    },
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Uconex',
+    url: 'https://uconex.co',
+    logo: { '@type': 'ImageObject', url: 'https://uconex.co/IsotipoPositivo.svg' },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `https://uconex.co/blog/${slug}`,
+  },
+  keywords: (fm.tags as string[])?.join(', '),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://uconex.co' },
+    { '@type': 'ListItem', position: 2, name: 'Blog',   item: 'https://uconex.co/blog' },
+    { '@type': 'ListItem', position: 3, name: fm.title, item: `https://uconex.co/blog/${slug}` },
+  ],
+};
+
+const faqSchema = faqs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(f => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+} : null;
+---
+
+<BaseLayout title={fm.title} description={fm.description}>
+  <script type="application/ld+json" is:inline slot="head" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" is:inline slot="head" set:html={JSON.stringify(breadcrumbSchema)} />
+  {faqSchema && <script type="application/ld+json" is:inline slot="head" set:html={JSON.stringify(faqSchema)} />}
+
+  <!-- ── HERO ──────────────────────────────────────────────────────── -->
+  <section class="article-hero">
+    <div class="article-hero-inner">
+
+      <nav class="breadcrumb" aria-label="Migas de pan">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <a href="/blog">Blog</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{categoria}</span>
+      </nav>
+
+      <div class="article-tags" aria-label="Categorías">
+        {(fm.tags as string[] || []).map((tag) => (
+          <span class="article-tag">{tag}</span>
+        ))}
+      </div>
+
+      <h1>{fm.title}</h1>
+
+      <div class="article-meta-bar">
+        <div class="author-chip">
+          <div class="author-avatar-sm" aria-hidden="true">{initials(authorName)}</div>
+          <span class="author-name-sm">{authorName}</span>
+        </div>
+        <time class="article-date" datetime={String(fm.pubDate)}>{pubDateFormatted}</time>
+        <span class="read-time" aria-label={`Tiempo de lectura: ${readTime}`}>{readTime}</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── LAYOUT 2 COLUMNAS ─────────────────────────────────────────── -->
+  <div class="article-layout">
+    <div class="article-layout-inner">
+
+      <!-- COLUMNA PRINCIPAL ─────────────────────────────────────── -->
+      <main class="article-content" id="article-main">
+
+        <!-- TL;DR -->
+        {fm.description && (
+          <div class="tldr">
+            <span class="tldr-label">TL;DR — Resumen ejecutivo</span>
+            <p>{fm.description}</p>
+          </div>
+        )}
+
+        <!-- Imagen de portada -->
+        {fm.image && (
+          <figure class="article-cover">
+            <img
+              src={`${fm.image.url}&w=900&q=85`}
+              alt={fm.image.alt}
+              loading="eager"
+              decoding="async"
+            />
+          </figure>
+        )}
+
+        <!-- Cuerpo del artículo -->
+        <div class="prose" set:html={compiled} />
+
+        <!-- FAQ interna ───────────────────────────────────────── -->
+        {faqs.length > 0 && (
+          <div class="article-faq" aria-label="Preguntas frecuentes">
+            <h3>Preguntas frecuentes</h3>
+            <dl class="mini-faq">
+              {faqs.map(f => (
+                <div class="mini-faq-item">
+                  <dt class="mini-faq-q">{f.q}</dt>
+                  <dd class="mini-faq-a">{f.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+
+        <!-- CTA inline ────────────────────────────────────────── -->
+        <div class="article-cta" aria-label="Llamada a la acción">
+          <div class="article-cta-inner">
+            <h3>¿Listo para aplicar esto en tu negocio?</h3>
+            <p>Agenda un diagnóstico gratuito con Uconex. Te mostramos exactamente cómo implementar estas estrategias para escalar tus ventas con marketing digital y automatización.</p>
+            <a href="/#contacto" class="cta-btn">Quiero mi diagnóstico gratis</a>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- SIDEBAR ───────────────────────────────────────────────── -->
+      <aside class="article-sidebar" aria-label="Tabla de contenidos y autor">
+
+        <!-- TOC -->
+        {h2Headings.length > 0 && (
+          <nav class="toc" aria-label="Tabla de contenidos" id="toc">
+            <p class="toc-title">En este artículo</p>
+            <ol class="toc-list" role="list">
+              {h2Headings.map(h => (
+                <li>
+                  <a href={`#${h.slug}`} class="toc-link" data-target={h.slug}>
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
+        <!-- Bio del autor -->
+        <div class="author-card">
+          <div class="author-avatar-lg" aria-hidden="true">{initials(authorName)}</div>
+          <h4>{authorName}</h4>
+          <p class="author-role">Marketing Digital & Automatización</p>
+          <p class="author-bio">
+            Especialistas en estrategias de crecimiento digital, automatización con IA y publicidad en Meta Ads para negocios pequeños en Colombia.
+          </p>
+          <a href="/#contacto" class="author-cta">Hablar con el equipo</a>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+  <!-- ── ARTÍCULOS RELACIONADOS ─────────────────────────────────── -->
+  {related.length > 0 && (
+    <section class="related" aria-label="Artículos relacionados">
+      <div class="related-inner">
+        <h2>Artículos relacionados</h2>
+        <div class="related-grid">
+          {related.map(post => (
+            <article class="related-card">
+              {post.imagen && (
+                <a href={post.href} class="related-img-link" tabindex="-1" aria-hidden="true">
+                  <div class="related-img">
+                    <img src={post.imagen} alt={post.alt} loading="lazy" />
+                  </div>
+                </a>
+              )}
+              <div class="related-body">
+                <span class="related-cat">{post.categoria}</span>
+                <h3>
+                  <a href={post.href}>{post.titulo}</a>
+                </h3>
+                <p>{post.extracto}</p>
+                <a href={post.href} class="related-link">
+                  Leer artículo
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+</BaseLayout>
+
+<!-- ── ESTILOS ──────────────────────────────────────────────────────── -->
+<style>
+  /* ── HERO ──────────────────────────────────────────────────────────── */
+  .article-hero {
+    background: #0a0a0f;
+    color: #fff;
+    padding: calc(68px + 3rem) 1.5rem 3rem;
+    position: relative;
+    overflow: hidden;
+    margin-top: -68px;
+  }
+
+  .article-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.035) 25%, rgba(255,255,255,0.035) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.035) 75%, rgba(255,255,255,0.035) 76%, transparent 77%),
+      linear-gradient(90deg, transparent 24%, rgba(255,255,255,0.035) 25%, rgba(255,255,255,0.035) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.035) 75%, rgba(255,255,255,0.035) 76%, transparent 77%);
+    background-size: 60px 60px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .article-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 560px;
+    height: 220px;
+    background: radial-gradient(ellipse, rgba(113,72,252,0.25) 0%, transparent 70%);
+    filter: blur(24px);
+    pointer-events: none;
+  }
+
+  .article-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a {
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover { color: rgba(255,255,255,0.8); }
+
+  /* Tags */
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-tag {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9D8CF4;
+    background: rgba(157,140,244,0.12);
+    border: 1px solid rgba(157,140,244,0.25);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+  }
+
+  /* H1 */
+  .article-hero h1 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.18;
+    color: #fff;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Meta bar */
+  .article-meta-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .author-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .author-avatar-sm {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(113,72,252,0.3);
+    border: 1px solid rgba(113,72,252,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #9D8CF4;
+    flex-shrink: 0;
+  }
+
+  .author-name-sm {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .article-date,
+  .read-time {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── LAYOUT ─────────────────────────────────────────────────────────── */
+  .article-layout {
+    background: #fff;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .article-layout-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  /* ── TL;DR ──────────────────────────────────────────────────────────── */
+  .tldr {
+    background: #f7f7f8;
+    border-left: 3px solid #4924BC;
+    border-radius: 0 10px 10px 0;
+    padding: 1.1rem 1.35rem;
+    margin-bottom: 2rem;
+  }
+
+  .tldr-label {
+    display: block;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #4924BC;
+    margin-bottom: 0.5rem;
+  }
+
+  .tldr p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: #4b4b56;
+    margin: 0;
+  }
+
+  /* ── Cover image ────────────────────────────────────────────────────── */
+  .article-cover {
+    margin: 0 0 2rem;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .article-cover img {
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── PROSE ──────────────────────────────────────────────────────────── */
+  .prose {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.975rem;
+    line-height: 1.85;
+    color: #4b4b56;
+  }
+
+  .prose :global(h2) {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    font-weight: 700;
+    color: #161616;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-top: 2.75rem;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #ececec;
+    scroll-margin-top: 90px;
+  }
+
+  .prose :global(h3) {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #161616;
+    letter-spacing: -0.01em;
+    margin-top: 1.75rem;
+    margin-bottom: 0.65rem;
+    scroll-margin-top: 90px;
+  }
+
+  .prose :global(h4) {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2d2d2d;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose :global(p) {
+    margin-bottom: 1.35rem;
+    color: #4b4b56;
+  }
+
+  .prose :global(strong) {
+    color: #161616;
+    font-weight: 700;
+  }
+
+  .prose :global(em) {
+    color: #7148FC;
+    font-style: italic;
+  }
+
+  .prose :global(a) {
+    color: #4924BC;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+
+  .prose :global(a:hover) { color: #7148FC; }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.5rem;
+    margin-bottom: 1.35rem;
+  }
+
+  .prose :global(li) {
+    color: #4b4b56;
+    margin-bottom: 0.45rem;
+    line-height: 1.75;
+  }
+
+  .prose :global(li::marker) { color: #7148FC; }
+
+  .prose :global(blockquote) {
+    border-left: 3px solid #7148FC;
+    background: rgba(113,72,252,0.04);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin: 1.75rem 0;
+    font-style: italic;
+    color: #4924BC;
+  }
+
+  .prose :global(code) {
+    font-size: 0.875em;
+    background: #f3f3f8;
+    color: #4924BC;
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+  }
+
+  .prose :global(pre) {
+    background: #f3f3f8;
+    border: 1px solid #e5e5ea;
+    border-radius: 10px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+    color: #161616;
+  }
+
+  .prose :global(hr) {
+    border: none;
+    border-top: 1px solid #ececec;
+    margin: 2.5rem 0;
+  }
+
+  .prose :global(img) {
+    width: 100%;
+    border-radius: 10px;
+    margin: 1.75rem 0;
+    border: 1px solid #e5e5ea;
+    display: block;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .prose :global(th) {
+    background: #f3f3f8;
+    color: #161616;
+    font-family: 'Graphie', sans-serif;
+    font-weight: 700;
+    padding: 0.7rem 1rem;
+    border: 1px solid #e5e5ea;
+    text-align: left;
+  }
+
+  .prose :global(td) {
+    padding: 0.6rem 1rem;
+    border: 1px solid #e5e5ea;
+    color: #4b4b56;
+  }
+
+  .prose :global(tr:nth-child(even) td) {
+    background: rgba(113,72,252,0.03);
+  }
+
+  /* ── FAQ INTERNA ────────────────────────────────────────────────────── */
+  .article-faq {
+    background: #f7f7f8;
+    border-radius: 14px;
+    padding: 1.75rem;
+    margin: 2.5rem 0;
+  }
+
+  .article-faq h3 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #161616;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.1rem;
+  }
+
+  .mini-faq {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mini-faq-item {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid #e5e5ea;
+  }
+
+  .mini-faq-item:last-child { border-bottom: none; }
+
+  .mini-faq-q {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #161616;
+    margin-bottom: 0.4rem;
+  }
+
+  .mini-faq-a {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.845rem;
+    line-height: 1.75;
+    color: #6b6b76;
+    margin: 0;
+  }
+
+  /* ── CTA INLINE ─────────────────────────────────────────────────────── */
+  .article-cta {
+    background: #161616;
+    border-radius: 16px;
+    padding: 0;
+    margin: 2.5rem 0 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .article-cta::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 200px;
+    background: radial-gradient(ellipse, rgba(113,72,252,0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .article-cta-inner {
+    position: relative;
+    z-index: 1;
+    padding: 2.25rem;
+    text-align: center;
+  }
+
+  .article-cta h3 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6rem;
+  }
+
+  .article-cta p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.5);
+    max-width: 480px;
+    margin: 0 auto 1.35rem;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 0.75rem 1.6rem;
+    border-radius: 8px;
+    background: #fff;
+    color: #161616;
+    border: 2px solid #fff;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .cta-btn:hover {
+    background: transparent;
+    color: #fff;
+  }
+
+  /* ── SIDEBAR ────────────────────────────────────────────────────────── */
+  .article-sidebar {
+    position: sticky;
+    top: 88px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* TOC */
+  .toc {
+    background: #f7f7f8;
+    border-radius: 12px;
+    padding: 1.25rem 1.35rem;
+  }
+
+  .toc-title {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #161616;
+    margin-bottom: 0.85rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .toc-list li { border-bottom: 1px solid #ececec; }
+  .toc-list li:last-child { border-bottom: none; }
+
+  .toc-link {
+    display: block;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #6b6b76;
+    text-decoration: none;
+    padding: 0.55rem 0;
+    transition: color 0.2s, padding-left 0.2s;
+  }
+
+  .toc-link:hover { color: #161616; }
+
+  .toc-link.is-active {
+    color: #4924BC;
+    font-weight: 700;
+    padding-left: 0.5rem;
+  }
+
+  /* Author card */
+  .author-card {
+    border: 1px solid #e5e5ea;
+    border-radius: 12px;
+    padding: 1.35rem;
+    text-align: center;
+  }
+
+  .author-avatar-lg {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(113,72,252,0.1);
+    border: 2px solid rgba(113,72,252,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #7148FC;
+    margin: 0 auto 0.85rem;
+  }
+
+  .author-card h4 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #161616;
+    margin-bottom: 0.25rem;
+  }
+
+  .author-role {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.75rem;
+    color: #9D8CF4;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .author-bio {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: #6b6b76;
+    margin-bottom: 1rem;
+  }
+
+  .author-cta {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #4924BC;
+    text-decoration: none;
+    border: 1.5px solid rgba(73,36,188,0.3);
+    border-radius: 7px;
+    padding: 0.45rem 1rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .author-cta:hover {
+    border-color: #7148FC;
+    background: rgba(113,72,252,0.05);
+  }
+
+  /* ── ARTÍCULOS RELACIONADOS ─────────────────────────────────────────── */
+  .related {
+    background: #fafafa;
+    border-top: 1px solid #ececec;
+    padding: 3.5rem 1.5rem 5rem;
+  }
+
+  .related-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .related h2 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-weight: 700;
+    color: #161616;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.75rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .related-card {
+    background: #fff;
+    border: 1px solid #e5e5ea;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .related-card:hover {
+    box-shadow: 0 6px 24px rgba(113,72,252,0.08);
+    border-color: rgba(113,72,252,0.2);
+    transform: translateY(-3px);
+  }
+
+  .related-img-link { display: block; }
+
+  .related-img {
+    width: 100%;
+    height: 160px;
+    background: #e8e8ec;
+    overflow: hidden;
+  }
+
+  .related-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .related-card:hover .related-img img { transform: scale(1.04); }
+
+  .related-body {
+    padding: 1.25rem 1.35rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .related-cat {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.67rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #7148FC;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-card h3 {
+    font-family: 'Avant Garde', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #161616;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+    flex-grow: 1;
+  }
+
+  .related-card h3 a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s;
+  }
+
+  .related-card:hover h3 a { color: #4924BC; }
+
+  .related-card p {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    color: #6b6b76;
+    margin-bottom: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .related-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #4924BC;
+    text-decoration: none;
+    transition: gap 0.2s, color 0.2s;
+    margin-top: auto;
+  }
+
+  .related-link:hover { gap: 0.5rem; color: #7148FC; }
+
+  /* ── RESPONSIVE ─────────────────────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .article-layout-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .article-sidebar {
+      position: static;
+      order: -1; /* Sidebar arriba en tablet */
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .toc { flex: 1 1 280px; }
+    .author-card { flex: 1 1 240px; }
+  }
+
+  @media (max-width: 640px) {
+    .article-hero {
+      padding: calc(68px + 2rem) 1.25rem 2.5rem;
+    }
+
+    .article-layout {
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    .article-cover img {
+      height: 220px;
+    }
+
+    .article-sidebar {
+      flex-direction: column;
+    }
+
+    .article-cta-inner {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .related { padding: 2.5rem 1.25rem 4rem; }
+
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .article-meta-bar {
+      gap: 0.6rem;
+    }
+
+    .article-tags {
+      gap: 0.3rem;
+    }
+  }
+</style>
+
+<!-- ── TOC ACTIVO (IntersectionObserver) ─────────────────────────────── -->
+<script>
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+  if (tocLinks.length > 0) {
+    const headingEls = document.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id]');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            tocLinks.forEach(link => {
+              link.classList.toggle('is-active', link.dataset.target === id);
+            });
+          }
+        });
+      },
+      { rootMargin: '-15% 0px -70% 0px' }
+    );
+
+    headingEls.forEach(el => observer.observe(el));
+  }
+</script>

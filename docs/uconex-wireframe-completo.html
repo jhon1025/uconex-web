@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uconex - Wireframe Completo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1A1A1F;
+            background: #fff;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── ANNOTATION SYSTEM ── */
+        .section-tag {
+            display: inline-block;
+            background: #1A1A1F;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            padding: 4px 10px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .section-tag.light {
+            background: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.8);
+        }
+        .note {
+            background: #FFFBEB;
+            border: 1px dashed #E5C34A;
+            color: #92750C;
+            font-size: 10px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        .schema-tag {
+            display: inline-block;
+            background: #EEF2FF;
+            border: 1px solid #C7D2FE;
+            color: #4338CA;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-top: 6px;
+            letter-spacing: 0.03em;
+        }
+        .triplet-tag {
+            display: inline-block;
+            background: #F0FDF4;
+            border: 1px solid #A7F3D0;
+            color: #065F46;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-top: 4px;
+            letter-spacing: 0.03em;
+        }
+
+        /* ── NAV ── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(26,26,31,0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 54px;
+        }
+        .nav-logo {
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: 0.08em;
+            color: #fff;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .nav-logo-icon {
+            width: 22px; height: 22px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 5px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; color: rgba(255,255,255,0.5);
+        }
+        .nav-links {
+            display: flex;
+            gap: 26px;
+            list-style: none;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.5);
+        }
+        .nav-cta-btn {
+            background: #fff;
+            color: #1A1A1F;
+            border: none;
+            padding: 7px 18px;
+            border-radius: 50px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+        }
+
+        /* ── GLOBAL SECTION ── */
+        section { position: relative; padding: 80px 24px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .section-divider {
+            width: 100%;
+            border: none;
+            border-top: 1px dashed #D1D1D6;
+            margin: 0;
+        }
+
+        /* ═══════════════════════════════════════
+           S1. HERO
+           ═══════════════════════════════════════ */
+        .hero {
+            background: #1A1A1F;
+            color: #fff;
+            text-align: center;
+            padding: 90px 24px 110px;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.06) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.06) 75%, rgba(255,255,255,0.06) 76%, transparent 77%),
+                linear-gradient(90deg, transparent 24%, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.06) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.06) 75%, rgba(255,255,255,0.06) 76%, transparent 77%);
+            background-size: 55px 55px;
+            -webkit-mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,0.5) 40%, transparent 70%);
+            mask-image: linear-gradient(to bottom, black 0%, rgba(0,0,0,0.5) 40%, transparent 70%);
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 50%;
+            background: radial-gradient(ellipse at center, rgba(150,150,150,0.15) 0%, transparent 70%);
+            filter: blur(40px);
+        }
+        .hero-inner { position: relative; z-index: 2; }
+        .hero-brand {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 18px;
+        }
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 900;
+            line-height: 1.12;
+            margin-bottom: 22px;
+            letter-spacing: -0.02em;
+        }
+        .hero-hl {
+            display: inline-block;
+            background: rgba(255,255,255,0.12);
+            padding: 4px 22px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+            margin-top: 4px;
+        }
+        .hero-sub {
+            font-size: clamp(13px, 1.5vw, 15px);
+            color: rgba(255,255,255,0.5);
+            max-width: 540px;
+            margin: 0 auto 22px;
+            line-height: 1.7;
+        }
+        .hero-sub strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+        .tags {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+        .tag {
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 5px 16px;
+            border-radius: 50px;
+            font-size: 11.5px;
+            color: rgba(255,255,255,0.5);
+        }
+        .ctas {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 11px 28px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            border: 2px solid #fff;
+        }
+        .btn-pri { background: #fff; color: #1A1A1F; }
+        .btn-sec { background: transparent; color: #fff; }
+
+        /* ═══════════════════════════════════════
+           S2. PROBLEMA
+           ═══════════════════════════════════════ */
+        .problema {
+            background: #1A1A1F;
+            color: #fff;
+            padding: 70px 24px 80px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .prob-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+        .prob-left h2 {
+            font-size: clamp(22px, 3.2vw, 34px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 18px;
+        }
+        .prob-left p {
+            font-size: 13.5px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 12px;
+        }
+        .dolor-cards { display: grid; gap: 12px; }
+        .dolor-card {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex; gap: 12px;
+            align-items: flex-start;
+            background: rgba(255,255,255,0.02);
+        }
+        .dolor-ico {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.06);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+        .dolor-card h4 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 3px;
+            color: rgba(255,255,255,0.85);
+        }
+        .dolor-card p {
+            font-size: 11.5px;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.4);
+            margin: 0;
+        }
+        @media (max-width: 768px) {
+            .prob-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ═══════════════════════════════════════
+           S3. SERVICIOS
+           ═══════════════════════════════════════ */
+        .servicios {
+            background: #fff;
+            padding: 80px 24px;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .section-header h2 {
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .section-header p {
+            font-size: 14px;
+            color: #6B6B76;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .service-card {
+            border: 1px solid #E5E5EA;
+            border-radius: 14px;
+            padding: 28px;
+            transition: box-shadow 0.2s;
+        }
+        .service-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .svc-icon {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            background: #F3F3F5;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+        .service-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .service-card p {
+            font-size: 12.5px;
+            line-height: 1.7;
+            color: #6B6B76;
+            margin-bottom: 14px;
+        }
+        .svc-link {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1A1A1F;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        @media (max-width: 768px) {
+            .services-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ═══════════════════════════════════════
+           S4. CÓMO FUNCIONA
+           ═══════════════════════════════════════ */
+        .proceso {
+            background: #FAFAFA;
+            padding: 80px 24px;
+            border-top: 1px solid #ECECEC;
+            border-bottom: 1px solid #ECECEC;
+        }
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+            position: relative;
+        }
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 28px;
+            left: 8%;
+            right: 8%;
+            height: 1px;
+            border-top: 2px dashed #D1D1D6;
+        }
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        .step-num {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: #1A1A1F;
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 18px;
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
+        }
+        .step h4 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .step p {
+            font-size: 11.5px;
+            line-height: 1.6;
+            color: #6B6B76;
+            max-width: 220px;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .steps::before { display: none; }
+        }
+
+        /* ═══════════════════════════════════════
+           S5. RESULTADOS / SOCIAL PROOF
+           ═══════════════════════════════════════ */
+        .resultados {
+            background: #1A1A1F;
+            color: #fff;
+            padding: 80px 24px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        .stat-card {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            background: rgba(255,255,255,0.02);
+        }
+        .stat-num {
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.5;
+        }
+        .tools-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .tool-logo {
+            width: 80px; height: 32px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px;
+            color: rgba(255,255,255,0.35);
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ═══════════════════════════════════════
+           S6. FAQ
+           ═══════════════════════════════════════ */
+        .faq {
+            background: #fff;
+            padding: 80px 24px;
+        }
+        .faq-list {
+            max-width: 720px;
+            margin: 48px auto 0;
+        }
+        .faq-item {
+            border-bottom: 1px solid #ECECEC;
+            padding: 20px 0;
+        }
+        .faq-q {
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-q::after {
+            content: '+';
+            font-size: 20px;
+            font-weight: 300;
+            color: #999;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+        .faq-a {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #6B6B76;
+            margin-top: 10px;
+            padding-right: 32px;
+        }
+
+        /* ═══════════════════════════════════════
+           S7. BLOG PREVIEW
+           ═══════════════════════════════════════ */
+        .blog-preview {
+            background: #FAFAFA;
+            padding: 80px 24px;
+            border-top: 1px solid #ECECEC;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+        .blog-card {
+            background: #fff;
+            border: 1px solid #E5E5EA;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .blog-img {
+            width: 100%;
+            height: 160px;
+            background: #E8E8EC;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #999;
+            font-weight: 500;
+        }
+        .blog-body {
+            padding: 20px;
+        }
+        .blog-cat {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .blog-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 8px;
+        }
+        .blog-card p {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #6B6B76;
+            margin-bottom: 12px;
+        }
+        .blog-link {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1A1A1F;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .blog-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ═══════════════════════════════════════
+           S8. CTA FINAL
+           ═══════════════════════════════════════ */
+        .cta-final {
+            background: #1A1A1F;
+            color: #fff;
+            padding: 90px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-final::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(180,180,180,0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .cta-final-inner { position: relative; z-index: 2; }
+        .cta-final h2 {
+            font-size: clamp(24px, 3.5vw, 36px);
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+        .cta-final p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            max-width: 500px;
+            margin: 0 auto 28px;
+            line-height: 1.7;
+        }
+
+        /* ═══════════════════════════════════════
+           S9. FOOTER
+           ═══════════════════════════════════════ */
+        .footer {
+            background: #111114;
+            color: rgba(255,255,255,0.4);
+            padding: 48px 24px 32px;
+            font-size: 12px;
+        }
+        .footer-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .footer-brand {
+            font-size: 14px;
+            font-weight: 800;
+            color: rgba(255,255,255,0.8);
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+        .footer-desc {
+            font-size: 12px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.35);
+            max-width: 280px;
+        }
+        .footer-col h5 {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 14px;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col li {
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.35);
+        }
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: rgba(255,255,255,0.25);
+        }
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ── WhatsApp Float ── */
+        .wa-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 52px; height: 52px;
+            background: #1A1A1F;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 200;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .wa-float span {
+            font-size: 10px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav class="nav">
+    <div class="nav-inner">
+        <div class="nav-logo">
+            <div class="nav-logo-icon">U</div>
+            UCONEX
+        </div>
+        <ul class="nav-links">
+            <li>Servicios</li>
+            <li>Proceso</li>
+            <li>Blog</li>
+            <li>FAQ</li>
+        </ul>
+        <button class="nav-cta-btn">Contáctanos</button>
+    </div>
+</nav>
+
+<!-- ══════════════ S1. HERO ══════════════ -->
+<section class="hero">
+    <div class="hero-inner">
+        <span class="section-tag light">S1 — HERO</span>
+        <div class="hero-brand">✦ UCONEX</div>
+        <h1>
+            Escalamos tu negocio<br>
+            con marketing e<br>
+            <span class="hero-hl">Inteligencia Artificial</span>
+        </h1>
+        <p class="hero-sub">
+            ¿Quieres llegar a tus objetivos de ventas? Nosotros escalamos, diversificamos y
+            automatizamos tus ventas. <strong>Somos tu partner en crecimiento exponencial</strong>
+        </p>
+        <div class="tags">
+            <span class="tag">Pauta digital</span>
+            <span class="tag">Desarrollo web</span>
+            <span class="tag">Automatización</span>
+        </div>
+        <div class="ctas">
+            <a class="btn btn-pri">Contáctanos</a>
+            <a class="btn btn-sec">Ver soluciones</a>
+        </div>
+        <div class="note" style="max-width:400px;margin:20px auto 0;">
+            Grid pattern CSS + glow radial inferior. Igual al diseño actual.
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ S2. PROBLEMA ══════════════ -->
+<section class="problema">
+    <div class="container">
+        <span class="section-tag light">S2 — EL PROBLEMA</span>
+        <div class="prob-grid">
+            <div class="prob-left">
+                <h2>Tienes un buen producto, pero tu negocio sigue invisible en internet</h2>
+                <p>Vendes bien de boca en boca, pero cuando alguien busca tu servicio en redes o en Google, no te encuentra. Publicas en redes sin estrategia, no sabes si tu pauta está funcionando, y respondes mensajes de WhatsApp a mano mientras pierdes clientes que no esperan.</p>
+                <p>Uconex entiende este problema porque trabajamos exclusivamente con negocios pequeños en Colombia que necesitan digitalizarse para crecer.</p>
+                <div class="triplet-tag">Tripleta: Negocios pequeños en Colombia [necesitan] digitalizarse para crecer</div>
+            </div>
+            <div class="dolor-cards">
+                <div class="dolor-card">
+                    <div class="dolor-ico">⏰</div>
+                    <div>
+                        <h4>Respondes tarde</h4>
+                        <p>Clientes te escriben por WhatsApp y tardan horas o días en recibir respuesta. Muchos no esperan.</p>
+                    </div>
+                </div>
+                <div class="dolor-card">
+                    <div class="dolor-ico">📉</div>
+                    <div>
+                        <h4>Pauta sin retorno</h4>
+                        <p>Inviertes en publicidad sin saber si está funcionando. No mides, no optimizas, no escalas.</p>
+                    </div>
+                </div>
+                <div class="dolor-card">
+                    <div class="dolor-ico">👻</div>
+                    <div>
+                        <h4>Invisible digitalmente</h4>
+                        <p>No tienes sitio web, o tienes uno que no convierte. Tu competencia sí aparece en Google.</p>
+                    </div>
+                </div>
+                <div class="dolor-card">
+                    <div class="dolor-ico">🔧</div>
+                    <div>
+                        <h4>Todo es manual</h4>
+                        <p>Copias y pegas mensajes, no tienes CRM, y tus procesos dependen 100% de ti.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ S3. SERVICIOS ══════════════ -->
+<section class="servicios">
+    <div class="container">
+        <span class="section-tag">S3 — SERVICIOS</span>
+        <div class="section-header">
+            <h2>Soluciones que hacen crecer tu negocio</h2>
+            <p>Cada servicio está diseñado para resolver un problema específico de tu negocio. Puedes contratarlos individualmente o como un sistema completo.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="svc-icon">📢</div>
+                <h3>Campañas de Facebook Ads que convierten clics en clientes reales</h3>
+                <p>Uconex diseña y gestiona campañas de publicidad en Facebook e Instagram Ads enfocadas en resultados medibles para negocios pequeños. Desde la segmentación de audiencias hasta la optimización del presupuesto.</p>
+                <a class="svc-link">Saber más →</a>
+                <br><span class="triplet-tag">Uconex [gestiona] campañas de Facebook Ads para negocios pequeños en Colombia</span>
+                <br><span class="schema-tag">Schema: Service</span>
+            </div>
+            <div class="service-card">
+                <div class="svc-icon">🌐</div>
+                <h3>Landing pages y sitios web que convierten visitantes en compradores</h3>
+                <p>Uconex crea sitios web y landing pages optimizados para conversión, velocidad de carga y experiencia móvil. Cada página con un objetivo claro: capturar leads o generar ventas.</p>
+                <a class="svc-link">Saber más →</a>
+                <br><span class="triplet-tag">Uconex [desarrolla] landing pages de alta conversión optimizadas para móvil</span>
+                <br><span class="schema-tag">Schema: Service</span>
+            </div>
+            <div class="service-card">
+                <div class="svc-icon">⚡</div>
+                <h3>Automatiza tu atención al cliente y no pierdas otro lead</h3>
+                <p>Uconex implementa automatización de WhatsApp Business con n8n y Kommo CRM para que tu negocio responda instantáneamente a cada prospecto, las 24 horas del día.</p>
+                <a class="svc-link">Saber más →</a>
+                <br><span class="triplet-tag">Uconex [implementa] automatización de WhatsApp con n8n y Kommo CRM</span>
+                <br><span class="schema-tag">Schema: Service</span>
+            </div>
+            <div class="service-card">
+                <div class="svc-icon">🤖</div>
+                <h3>Un asistente virtual que atiende como tú, pero las 24 horas</h3>
+                <p>Uconex crea chatbots con inteligencia artificial personalizados para tu negocio. Entienden preguntas naturales, resuelven dudas y derivan a un humano solo cuando es necesario.</p>
+                <a class="svc-link">Saber más →</a>
+                <br><span class="triplet-tag">Uconex [crea] chatbots con IA para atención al cliente 24/7</span>
+                <br><span class="schema-tag">Schema: Service</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ S4. CÓMO FUNCIONA ══════════════ -->
+<section class="proceso">
+    <div class="container">
+        <span class="section-tag">S4 — CÓMO FUNCIONA</span>
+        <div class="section-header">
+            <h2>Del primer contacto a clientes recurrentes en 4 pasos</h2>
+            <p>Un proceso simple, transparente y enfocado en resultados desde el día uno.</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">01</div>
+                <h4>Diagnóstico gratuito</h4>
+                <p>Analizamos tu negocio, tu mercado y tus oportunidades digitales. Identificamos dónde estás perdiendo clientes.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">02</div>
+                <h4>Estrategia personalizada</h4>
+                <p>Diseñamos un plan de marketing digital, automatización y desarrollo web adaptado a tu presupuesto.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">03</div>
+                <h4>Implementación</h4>
+                <p>Activamos campañas, construimos tu sitio web y configuramos tus automatizaciones.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">04</div>
+                <h4>Optimización continua</h4>
+                <p>Medimos resultados cada semana, ajustamos campañas y escalamos lo que funciona.</p>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:24px;">
+            <span class="triplet-tag">Uconex [ofrece] un proceso de 4 pasos para digitalizar negocios pequeños</span>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ S5. RESULTADOS ══════════════ -->
+<section class="resultados">
+    <div class="container">
+        <span class="section-tag light">S5 — RESULTADOS</span>
+        <div class="section-header" style="color:#fff;">
+            <h2 style="color:#fff;">Resultados que hablan por nosotros</h2>
+            <p style="color:rgba(255,255,255,0.45);">Números reales de nuestros clientes y proyectos.</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-num">+150%</div>
+                <div class="stat-label">Aumento en leads<br>calificados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">&lt;30s</div>
+                <div class="stat-label">Tiempo de respuesta<br>con automatización</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">3x</div>
+                <div class="stat-label">Retorno en inversión<br>de pauta digital</div>
+            </div>
+        </div>
+        <div class="tools-bar">
+            <div class="tool-logo">Meta</div>
+            <div class="tool-logo">WhatsApp</div>
+            <div class="tool-logo">n8n</div>
+            <div class="tool-logo">Kommo</div>
+            <div class="tool-logo">Astro</div>
+        </div>
+        <div style="text-align:center;margin-top:20px;">
+            <div class="note" style="max-width:420px;display:inline-block;">
+                Reemplazar con métricas reales cuando estén disponibles. Los LLMs valoran datos concretos.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ S6. FAQ ══════════════ -->
+<section class="faq">
+    <div class="container">
+        <span class="section-tag">S6 — FAQ (CRÍTICA PARA AIO)</span>
+        <div class="section-header">
+            <h2>Preguntas frecuentes</h2>
+            <p>Respuestas claras a lo que más nos preguntan los emprendedores.</p>
+            <span class="schema-tag">Schema: FAQPage — Mayor impacto directo en AI Overviews</span>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-q">¿Qué es Uconex y qué servicios ofrece?</div>
+                <div class="faq-a">Uconex es una agencia de marketing digital y automatización con inteligencia artificial en Colombia. Ofrecemos cuatro servicios principales: gestión de campañas de Facebook Ads, desarrollo de sitios web y landing pages, automatización de WhatsApp Business con CRM, y creación de chatbots con IA. Trabajamos exclusivamente con negocios pequeños que quieren escalar sus ventas usando tecnología.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">¿Cuánto cuesta contratar a Uconex?</div>
+                <div class="faq-a">Los planes de Uconex se adaptan al tamaño y necesidades de cada negocio. Ofrecemos un diagnóstico gratuito para evaluar tu situación y recomendarte el plan más adecuado. Los servicios pueden contratarse de forma individual o como paquetes integrados de marketing + automatización.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">¿Por qué Uconex y no otra agencia de marketing digital?</div>
+                <div class="faq-a">A diferencia de agencias tradicionales que solo manejan redes sociales, Uconex integra marketing digital con automatización de procesos e inteligencia artificial. No solo atraemos clientes a tu negocio, sino que automatizamos la atención, el seguimiento y la conversión. Es una solución completa, no solo publicidad.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">¿Qué herramientas utiliza Uconex para la automatización?</div>
+                <div class="faq-a">Uconex utiliza n8n como plataforma de automatización de flujos, WhatsApp Business API para comunicación directa con clientes, y Kommo CRM para gestión del embudo de ventas. Además, implementamos chatbots con inteligencia artificial para atención automática 24/7.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">¿Uconex trabaja solo con negocios en Colombia?</div>
+                <div class="faq-a">Actualmente, Uconex trabaja principalmente con negocios pequeños en Colombia, pero nuestras soluciones de automatización y marketing digital son aplicables a cualquier negocio de habla hispana en Latinoamérica.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ S7. BLOG PREVIEW ══════════════ -->
+<section class="blog-preview">
+    <div class="container">
+        <span class="section-tag">S7 — BLOG (MOTOR AIO)</span>
+        <div class="section-header">
+            <h2>Recursos para hacer crecer tu negocio</h2>
+            <p>Guías, estrategias y herramientas explicadas de forma simple para emprendedores.</p>
+            <span class="schema-tag">Schema: Article + BlogPosting + BreadcrumbList</span>
+        </div>
+        <div class="blog-grid">
+            <div class="blog-card">
+                <div class="blog-img">[ Imagen artículo ]</div>
+                <div class="blog-body">
+                    <div class="blog-cat">Facebook Ads</div>
+                    <h4>Guía completa de Facebook Ads para negocios pequeños en Colombia [2026]</h4>
+                    <p>Todo lo que necesitas saber para crear, gestionar y optimizar campañas de Meta Ads desde cero.</p>
+                    <a class="blog-link">Leer artículo →</a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="blog-img">[ Imagen artículo ]</div>
+                <div class="blog-body">
+                    <div class="blog-cat">Automatización</div>
+                    <h4>Guía completa de automatización de WhatsApp Business para negocios [2026]</h4>
+                    <p>Cómo implementar n8n + WhatsApp API + Kommo CRM para responder al instante.</p>
+                    <a class="blog-link">Leer artículo →</a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="blog-img">[ Imagen artículo ]</div>
+                <div class="blog-body">
+                    <div class="blog-cat">Marketing Digital</div>
+                    <h4>¿Cómo crear una estrategia de marketing digital para tu negocio en Colombia?</h4>
+                    <p>Paso a paso para emprendedores que quieren profesionalizar su presencia digital.</p>
+                    <a class="blog-link">Leer artículo →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ S8. CTA FINAL ══════════════ -->
+<section class="cta-final">
+    <div class="cta-final-inner">
+        <span class="section-tag light">S8 — CTA FINAL</span>
+        <h2>¿Listo para que tu negocio<br>trabaje las 24 horas?</h2>
+        <p>El primer paso es un diagnóstico gratuito de tu negocio. Te mostramos exactamente dónde estás perdiendo clientes y cómo solucionarlo con marketing digital, automatización e inteligencia artificial.</p>
+        <div class="ctas">
+            <a class="btn btn-pri">Quiero mi diagnóstico gratis</a>
+            <a class="btn btn-sec">Ver nuestros servicios</a>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════ S9. FOOTER ══════════════ -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <div class="footer-brand">✦ UCONEX</div>
+            <p class="footer-desc">Uconex es una agencia de marketing digital y automatización con inteligencia artificial en Colombia. Ayudamos a negocios pequeños a escalar sus ventas con tecnología.</p>
+            <br>
+            <span class="schema-tag" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);">Schema: Organization + LocalBusiness</span>
+        </div>
+        <div class="footer-col">
+            <h5>Servicios</h5>
+            <ul>
+                <li>Facebook Ads</li>
+                <li>Desarrollo Web</li>
+                <li>Automatización</li>
+                <li>Chatbots con IA</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Recursos</h5>
+            <ul>
+                <li>Blog</li>
+                <li>Guías gratuitas</li>
+                <li>Casos de éxito</li>
+                <li>FAQ</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Contacto</h5>
+            <ul>
+                <li>WhatsApp</li>
+                <li>Instagram</li>
+                <li>LinkedIn</li>
+                <li>Email</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 Uconex. Todos los derechos reservados.</span>
+        <span>Política de privacidad · Términos</span>
+    </div>
+</footer>
+
+<!-- WhatsApp Float -->
+<div class="wa-float">
+    <span>WA</span>
+</div>
+
+</body>
+</html>
