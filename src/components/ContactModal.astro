@@ -378,21 +378,23 @@
 <script>
   import { createClient } from '@supabase/supabase-js';
 
-  const supabase = createClient(
-    import.meta.env.PUBLIC_SUPABASE_URL,
-    import.meta.env.PUBLIC_SUPABASE_ANON_KEY
-  );
-
   const WHATSAPP_NUMBER = '573118862990';
   const waMessage = (_nombre: string) => `Hola, quiero agendar mi diagnóstico gratuito`;
 
   // ── Guardar lead ────────────────────────────────────────────────
   async function saveLead(data: Record<string, string>) {
-    const { error } = await supabase
-      .from('leads')
-      .insert([{ nombre: data.nombre, correo: data.correo, whatsapp: data.whatsapp }]);
-
-    if (error) console.error('Error guardando lead:', error);
+    try {
+      const supabase = createClient(
+        import.meta.env.PUBLIC_SUPABASE_URL,
+        import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+      );
+      const { error } = await supabase
+        .from('leads')
+        .insert([{ nombre: data.nombre, correo: data.correo, whatsapp: data.whatsapp }]);
+      if (error) console.error('Error guardando lead:', error);
+    } catch (err) {
+      console.error('Supabase no disponible:', err);
+    }
   }
 
   // ── Referencias al DOM ──────────────────────────────────────────
