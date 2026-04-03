@@ -376,32 +376,23 @@
 
 <!-- ── Script ───────────────────────────────────────────────────── -->
 <script>
-  // ╔══════════════════════════════════════════════════════════════╗
-  // ║  CONFIGURACIÓN — actualiza estos valores cuando tengas      ║
-  // ║  el número real de WhatsApp de Uconex                       ║
-  // ╚══════════════════════════════════════════════════════════════╝
+  import { createClient } from '@supabase/supabase-js';
+
+  const supabase = createClient(
+    import.meta.env.PUBLIC_SUPABASE_URL,
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+  );
+
   const WHATSAPP_NUMBER = '573118862990';
   const waMessage = (_nombre: string) => `Hola, quiero agendar mi diagnóstico gratuito`;
 
   // ── Guardar lead ────────────────────────────────────────────────
   async function saveLead(data: Record<string, string>) {
-    // 1. localStorage — log local mientras conectas la base de datos
-    try {
-      const leads: unknown[] = JSON.parse(localStorage.getItem('uconex_leads') ?? '[]');
-      leads.push({ ...data, timestamp: new Date().toISOString() });
-      localStorage.setItem('uconex_leads', JSON.stringify(leads));
-    } catch (_) { /* si localStorage no está disponible */ }
+    const { error } = await supabase
+      .from('leads')
+      .insert([{ nombre: data.nombre, correo: data.correo, whatsapp: data.whatsapp }]);
 
-    // 2. TODO: cuando tengas la API lista, descomenta y ajusta:
-    // try {
-    //   await fetch('/api/leads', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(data),
-    //   });
-    // } catch (err) {
-    //   console.error('Error guardando lead:', err);
-    // }
+    if (error) console.error('Error guardando lead:', error);
   }
 
   // ── Referencias al DOM ──────────────────────────────────────────
