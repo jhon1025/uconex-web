@@ -208,14 +208,6 @@ const faqSchema = faqs.length > 0 ? {
       <!-- COLUMNA PRINCIPAL ─────────────────────────────────────── -->
       <main class="article-content" id="article-main">
 
-        <!-- TL;DR -->
-        {fm.description && (
-          <div class="tldr">
-            <span class="tldr-label">TL;DR — Resumen ejecutivo</span>
-            <p>{fm.description}</p>
-          </div>
-        )}
-
         <!-- Imagen de portada -->
         {fm.image && (
           <figure class="article-cover">
@@ -457,33 +449,6 @@ const faqSchema = faqs.length > 0 ? {
   }
 
   /* ── TL;DR ──────────────────────────────────────────────────────────── */
-  .tldr {
-    background: #f7f7f8;
-    border-left: 3px solid #4924BC;
-    border-radius: 0 10px 10px 0;
-    padding: 1.1rem 1.35rem;
-    margin-bottom: 2rem;
-  }
-
-  .tldr-label {
-    display: block;
-    font-family: 'Graphie', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #4924BC;
-    margin-bottom: 0.5rem;
-  }
-
-  .tldr p {
-    font-family: 'Graphie', sans-serif;
-    font-size: 0.9rem;
-    line-height: 1.75;
-    color: #4b4b56;
-    margin: 0;
-  }
-
   /* ── Cover image ────────────────────────────────────────────────────── */
   .article-cover {
     margin: 0 0 2rem;
