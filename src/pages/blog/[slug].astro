@@ -121,7 +121,9 @@ const articleSchema = {
   author: {
     '@type': 'Person',
     name: authorName,
-    jobTitle: 'Especialista en Marketing Digital',
+    jobTitle: 'Especialista en Marketing Digital y Automatización con IA',
+    url: 'https://jhonmurcia.com',
+    sameAs: ['https://jhonmurcia.com', 'https://www.linkedin.com/company/uconex-co/'],
     worksFor: {
       '@type': 'Organization',
       name: 'Uconex',
@@ -278,11 +280,14 @@ const faqSchema = faqs.length > 0 ? {
         <div class="author-card">
           <div class="author-avatar-lg" aria-hidden="true">{initials(authorName)}</div>
           <h4>{authorName}</h4>
-          <p class="author-role">Marketing Digital & Automatización</p>
+          <p class="author-role">Marketing Digital & Automatización con IA · Colombia</p>
           <p class="author-bio">
-            Especialistas en estrategias de crecimiento digital, automatización con IA y publicidad en Meta Ads para negocios pequeños en Colombia.
+            Fundador de Uconex. Especialista en pauta digital, automatización con IA y estrategias de crecimiento para negocios en Colombia y Latinoamérica.
           </p>
-          <a href="/#contacto" class="author-cta">Hablar con el equipo</a>
+          <div class="author-links">
+            <a href="https://jhonmurcia.com" class="author-web" target="_blank" rel="noopener noreferrer">jhonmurcia.com</a>
+            <a href="/#contacto" class="author-cta">Trabajar juntos</a>
+          </div>
         </div>
 
       </aside>
@@ -861,6 +866,33 @@ const faqSchema = faqs.length > 0 ? {
     line-height: 1.65;
     color: #6b6b76;
     margin-bottom: 1rem;
+  }
+
+  .author-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .author-web {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b6b76;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .author-web::before {
+    content: '🌐';
+    margin-right: 0.35rem;
+    font-size: 0.7rem;
+  }
+
+  .author-web:hover {
+    color: #4924BC;
   }
 
   .author-cta {

@@ -2,7 +2,7 @@
 title: 'Qué es el marketing digital y por qué tu negocio lo necesita hoy'
 pubDate: 2024-01-15
 description: 'El marketing digital es el conjunto de estrategias que conectan tu negocio con clientes en canales digitales. Descubre qué incluye, cómo funciona y por qué es imprescindible para crecer en 2024.'
-author: 'Equipo Uconex'
+author: 'Jhon Murcia'
 tags: ['Marketing Digital', 'Estrategia']
 image:
   url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80'

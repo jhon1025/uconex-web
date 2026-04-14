@@ -2,7 +2,7 @@
 title: 'Automatizaciones con IA: cómo las empresas ahorran tiempo y escalan ventas'
 pubDate: 2024-01-29
 description: 'Las automatizaciones con inteligencia artificial permiten a las empresas eliminar tareas repetitivas, responder clientes 24/7 y escalar operaciones sin contratar más personal. Descubre cómo funcionan y cuáles implementar primero.'
-author: 'Equipo Uconex'
+author: 'Jhon Murcia'
 tags: ['Automatización', 'Inteligencia Artificial', 'Productividad']
 image:
   url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&q=80'

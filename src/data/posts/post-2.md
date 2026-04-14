@@ -2,7 +2,7 @@
 title: 'Cómo optimizar tu pauta digital en Google Ads y Meta Ads'
 pubDate: 2024-01-22
 description: 'Aprende las estrategias más efectivas para mejorar el rendimiento de tus campañas en Google Ads y Meta Ads: segmentación, estructura, creatividades y métricas clave que debes monitorear.'
-author: 'Equipo Uconex'
+author: 'Jhon Murcia'
 tags: ['Pauta Digital', 'Google Ads', 'Meta Ads']
 image:
   url: 'https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1200&q=80'
