@@ -20,6 +20,11 @@ function formatDate(d: string) {
   });
 }
 
+function readingTime(raw: string) {
+  const mins = Math.ceil(raw.trim().split(/\s+/).length / 200);
+  return `${mins} min`;
+}
+
 const posts = Object.entries(postFiles)
   .map(([path, mod]: [string, any]) => {
     const fm = mod.frontmatter;
@@ -32,6 +37,7 @@ const posts = Object.entries(postFiles)
       categoria: getCategoria(fm.tags || []),
       imagen: (fm.image?.url as string) || '',
       alt: (fm.image?.alt as string) || (fm.title as string),
+      readTime: readingTime(mod.rawContent() as string),
     };
   })
   .sort((a, b) => new Date(b.fechaISO).getTime() - new Date(a.fechaISO).getTime());
@@ -79,8 +85,8 @@ const itemListSchema = {
         <span aria-hidden="true">/</span>
         <span aria-current="page">Blog</span>
       </nav>
-      <h1>Recursos para hacer crecer<br />tu negocio</h1>
-      <p>Guías, estrategias y herramientas de marketing digital y automatización explicadas de forma simple para emprendedores colombianos.</p>
+      <h1>Blog de Marketing Digital<br />y Automatización</h1>
+      <p>Guías, estrategias y casos reales de pauta digital, diseño web y automatización con IA para negocios en Colombia.</p>
     </div>
   </section>
 
@@ -135,6 +141,7 @@ const itemListSchema = {
             <div class="blog-meta">
               <span class="blog-cat">{featuredPost.categoria}</span>
               <time class="blog-date" datetime={featuredPost.fechaISO}>{featuredPost.fecha}</time>
+              <span class="blog-read-time">{featuredPost.readTime} lectura</span>
             </div>
             <h2>
               <a href={featuredPost.href} class="card-title-link">{featuredPost.titulo}</a>
@@ -168,6 +175,7 @@ const itemListSchema = {
             <div class="blog-meta">
               <span class="blog-cat">{post.categoria}</span>
               <time class="blog-date" datetime={post.fechaISO}>{post.fecha}</time>
+              <span class="blog-read-time">{post.readTime} lectura</span>
             </div>
             <h3>
               <a href={post.href} class="card-title-link">{post.titulo}</a>
@@ -208,41 +216,10 @@ const itemListSchema = {
 <style>
   /* ── HERO ─────────────────────────────────────────────────────────── */
   .blog-hero {
-    background: #0a0a0f;
-    color: #fff;
-    padding: calc(68px + 3.5rem) 1.5rem 3rem;
+    background: #fff;
+    padding: 3.5rem 1.5rem 2.75rem;
     text-align: center;
-    position: relative;
-    overflow: hidden;
-    margin-top: -68px;
-  }
-
-  /* Grid pattern */
-  .blog-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.045) 25%, rgba(255,255,255,0.045) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.045) 75%, rgba(255,255,255,0.045) 76%, transparent 77%),
-      linear-gradient(90deg, transparent 24%, rgba(255,255,255,0.045) 25%, rgba(255,255,255,0.045) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.045) 75%, rgba(255,255,255,0.045) 76%, transparent 77%);
-    background-size: 60px 60px;
-    mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
-    pointer-events: none;
-  }
-
-  /* Glow */
-  .blog-hero::after {
-    content: '';
-    position: absolute;
-    bottom: -10%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 500px;
-    height: 260px;
-    background: radial-gradient(ellipse, rgba(113,72,252,0.28) 0%, transparent 70%);
-    filter: blur(20px);
-    pointer-events: none;
+    border-bottom: 1px solid #ececec;
   }
 
   .blog-hero-inner {
@@ -259,18 +236,18 @@ const itemListSchema = {
     gap: 0.4rem;
     font-family: 'Graphie', sans-serif;
     font-size: 0.75rem;
-    color: rgba(255,255,255,0.3);
+    color: #aaa;
     margin-bottom: 1.25rem;
   }
 
   .breadcrumb a {
-    color: rgba(255,255,255,0.45);
+    color: #888;
     text-decoration: none;
     transition: color 0.2s;
   }
 
   .breadcrumb a:hover {
-    color: rgba(255,255,255,0.75);
+    color: #4924BC;
   }
 
   .blog-hero h1 {
@@ -279,7 +256,7 @@ const itemListSchema = {
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: #fff;
+    color: #161616;
     margin-bottom: 1rem;
   }
 
@@ -287,7 +264,7 @@ const itemListSchema = {
     font-family: 'Graphie', sans-serif;
     font-size: 0.95rem;
     line-height: 1.75;
-    color: rgba(255,255,255,0.45);
+    color: #6b6b76;
     max-width: 480px;
     margin: 0 auto;
   }
@@ -423,7 +400,8 @@ const itemListSchema = {
 
   .blog-card.featured .blog-img {
     height: 100%;
-    min-height: 260px;
+    min-height: 240px;
+    aspect-ratio: unset;
   }
 
   .blog-card.featured .blog-body {
@@ -455,7 +433,7 @@ const itemListSchema = {
 
   .blog-img {
     width: 100%;
-    height: 190px;
+    aspect-ratio: 16 / 9;
     background: #e8e8ec;
     overflow: hidden;
     position: relative;
@@ -515,6 +493,18 @@ const itemListSchema = {
     font-family: 'Graphie', sans-serif;
     font-size: 0.75rem;
     color: #aaa;
+  }
+
+  .blog-read-time {
+    font-family: 'Graphie', sans-serif;
+    font-size: 0.72rem;
+    color: #aaa;
+  }
+
+  .blog-read-time::before {
+    content: '·';
+    margin-right: 0.4rem;
+    color: #ddd;
   }
 
   .blog-card h3 {
@@ -664,7 +654,8 @@ const itemListSchema = {
     }
 
     .blog-card.featured .blog-img {
-      height: 220px;
+      aspect-ratio: 16 / 9;
+      height: auto;
       min-height: unset;
     }
 
@@ -675,7 +666,7 @@ const itemListSchema = {
 
   @media (max-width: 640px) {
     .blog-hero {
-      padding: calc(68px + 2.5rem) 1.25rem 2.5rem;
+      padding: 2.5rem 1.25rem 2rem;
     }
 
     .blog-filters {
