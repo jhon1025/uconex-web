@@ -191,7 +191,7 @@ const faqSchema = faqs.length > 0 ? {
 
       <div class="article-meta-bar">
         <div class="author-chip">
-          <div class="author-avatar-sm" aria-hidden="true">{initials(authorName)}</div>
+          <img src="/foto_jhon.png" alt={authorName} class="author-avatar-sm" width="28" height="28" loading="eager" />
           <span class="author-name-sm">{authorName}</span>
         </div>
         <time class="article-date" datetime={String(fm.pubDate)}>{pubDateFormatted}</time>
@@ -278,7 +278,14 @@ const faqSchema = faqs.length > 0 ? {
 
         <!-- Bio del autor -->
         <div class="author-card">
-          <div class="author-avatar-lg" aria-hidden="true">{initials(authorName)}</div>
+          <img
+            src="/foto_jhon.png"
+            alt="Jhon Murcia — Fundador de Uconex"
+            class="author-avatar-lg"
+            width="64"
+            height="64"
+            loading="lazy"
+          />
           <h4>{authorName}</h4>
           <p class="author-role">Marketing Digital & Automatización con IA · Colombia</p>
           <p class="author-bio">
@@ -413,16 +420,11 @@ const faqSchema = faqs.length > 0 ? {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: rgba(113,72,252,0.1);
+    object-fit: cover;
+    object-position: top center;
     border: 1px solid rgba(113,72,252,0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Avant Garde', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #4924BC;
     flex-shrink: 0;
+    display: block;
   }
 
   .author-name-sm {
@@ -829,18 +831,13 @@ const faqSchema = faqs.length > 0 ? {
   }
 
   .author-avatar-lg {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background: rgba(113,72,252,0.1);
+    object-fit: cover;
+    object-position: top center;
     border: 2px solid rgba(113,72,252,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Avant Garde', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #7148FC;
+    display: block;
     margin: 0 auto 0.85rem;
   }
 
