@@ -42,10 +42,6 @@ function readingTime(raw: string) {
   return `${mins} min lectura`;
 }
 
-function initials(name: string) {
-  return name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-}
-
 function getCategoria(tags: string[]): string {
   if (tags.some(t => ['Pauta Digital', 'Meta Ads', 'Facebook Ads', 'Google Ads'].includes(t)))
     return 'Facebook Ads';
@@ -563,18 +559,25 @@ const faqSchema = faqs.length > 0 ? {
   }
 
   .prose :global(pre) {
-    background: #f3f3f8;
+    background: #f7f7f9 !important;
     border: 1px solid #e5e5ea;
     border-radius: 10px;
     padding: 1.25rem;
     overflow-x: auto;
     margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.65;
   }
 
   .prose :global(pre code) {
-    background: none;
+    background: none !important;
     padding: 0;
-    color: #161616;
+    color: #161616 !important;
+    font-family: 'Fira Code', 'Courier New', monospace;
+  }
+
+  .prose :global(pre code span) {
+    color: inherit !important;
   }
 
   .prose :global(hr) {

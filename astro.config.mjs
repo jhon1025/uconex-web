@@ -8,6 +8,12 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://uconex.co',
   integrations: [sitemap()],
+  markdown: {
+    shikiConfig: {
+      theme: 'github-light',
+      wrap: true,
+    },
+  },
   vite: {
     plugins: [tailwindcss()]
   }
