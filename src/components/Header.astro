@@ -41,10 +41,17 @@ import Navigation from './Navigation.astro';
     left: 0;
     right: 0;
     z-index: 100;
-    background: rgba(6, 6, 15, 0.45);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    background: #06060F;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Frosted glass effect only when browser supports it (iOS Safari, Chrome desktop, modern Android) */
+  @supports ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+    .header {
+      background: rgba(6, 6, 15, 0.78);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+    }
   }
 
   .header-container {
